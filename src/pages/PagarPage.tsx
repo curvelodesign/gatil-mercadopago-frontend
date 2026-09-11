@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/client";
+import { useUtmParams } from "@/hooks/useUtmParams";
 
 export function PagarPage() {
+
   const [erro, setErro] = useState(false);
+  const { utmSource, utmMedium, utmCampaign } = useUtmParams();
 
   useEffect(() => {
     apiClient
-      .get<{ initPoint: string }>("/rifa/criar-pagamento")
+      .get<{ initPoint: string }>(`/rifa/criar-pagamento?utmSource=${utmSource ?? ""}&utmMedium=${utmMedium ?? ""}&utmCampaign=${utmCampaign ?? ""}`)
       .then(({ initPoint }) => {
         window.location.href = initPoint;
       })

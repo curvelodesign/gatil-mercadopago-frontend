@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 5173,
-      allowedHosts: [".trycloudflare.com"],
+      allowedHosts: [".trycloudflare.com", ".lhr.life"],
       // Sem BACKEND_TUNNEL_URL (ex: em CI), não registra proxy nenhum —
       // um proxy com target undefined quebraria o Vite na primeira
       // requisição, então melhor não existir do que existir quebrado.
