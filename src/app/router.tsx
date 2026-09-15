@@ -1,4 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
+import { DonationLayout } from "@/app/DonationLayout";
+import { RaffleLayout } from "@/app/RaffleLayout";
 import { RootLayout } from "@/app/RootLayout";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { ChooseNumberPage, chooseNumberLoader } from "@/pages/ChooseNumberPage";
@@ -15,15 +17,25 @@ export const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
-      { index: true, element: <PagarPage /> },
-      { path: "rifa/pagar", element: <PagarPage /> },
-      { path: "pagamento-aprovado", element: <ChooseNumberPage />, loader: chooseNumberLoader },
-      { path: "pagamento-pendente", element: <PagamentoPendentePage /> },
-      { path: "pagamento-recusado", element: <PagamentoRecusadoPage /> },
-      { path: "doar", element: <DoarPage /> },
-      { path: "doacao-confirmada", element: <DoacaoConfirmadaPage /> },
-      { path: "doacao-pendente", element: <DoacaoPendentePage /> },
-      { path: "doacao-recusada", element: <DoacaoRecusadaPage /> },
+      {
+        element: <RaffleLayout />,
+        children: [
+          { index: true, element: <PagarPage /> },
+          { path: "rifa/pagar", element: <PagarPage /> },
+          { path: "pagamento-aprovado", element: <ChooseNumberPage />, loader: chooseNumberLoader },
+          { path: "pagamento-pendente", element: <PagamentoPendentePage /> },
+          { path: "pagamento-recusado", element: <PagamentoRecusadoPage /> },
+        ],
+      },
+      {
+        element: <DonationLayout />,
+        children: [
+          { path: "doar", element: <DoarPage /> },
+          { path: "doacao-confirmada", element: <DoacaoConfirmadaPage /> },
+          { path: "doacao-pendente", element: <DoacaoPendentePage /> },
+          { path: "doacao-recusada", element: <DoacaoRecusadaPage /> },
+        ],
+      },
       { path: "*", element: <NotFoundPage /> },
     ],
   },

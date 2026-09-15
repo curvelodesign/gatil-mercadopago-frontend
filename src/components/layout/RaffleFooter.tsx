@@ -1,4 +1,4 @@
-export function Footer() {
+export function RaffleFooter() {
   return (
     <footer className="px-4 py-9 text-center text-xs leading-relaxed text-carvao/60">
       <p>
