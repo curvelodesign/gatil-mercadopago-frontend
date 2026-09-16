@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { criarPagamentoDoacao } from "@/lib/api/doacao";
 import { MIN_DONATION_AMOUNT } from "@/features/donation/constants";
+import { trackEvent } from "@/lib/analytics/metaPixel";
 
 interface UseDonationFormArgs {
   utm: {
@@ -52,6 +53,7 @@ export function useDonationForm({ utm }: UseDonationFormArgs) {
         utmMedium: utm.utmMedium,
         utmCampaign: utm.utmCampaign,
       });
+      trackEvent("Donate", { value: numericAmount, currency: "BRL" });
       window.location.href = initPoint;
     } catch {
       setSubmitError(

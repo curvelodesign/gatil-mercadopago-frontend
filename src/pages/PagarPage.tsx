@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { apiClient } from "@/lib/api/client";
 import { useUtmParams } from "@/hooks/useUtmParams";
+import { trackEvent } from "@/lib/analytics/metaPixel";
+import { TICKET_PRICE_BRL } from "@/features/raffle/constants";
+
 
 export function PagarPage() {
 
@@ -11,6 +14,7 @@ export function PagarPage() {
     apiClient
       .get<{ initPoint: string }>(`/rifa/criar-pagamento?utmSource=${utmSource ?? ""}&utmMedium=${utmMedium ?? ""}&utmCampaign=${utmCampaign ?? ""}`)
       .then(({ initPoint }) => {
+        trackEvent("InitiateCheckout", { value: TICKET_PRICE_BRL, currency: "BRL" });
         window.location.href = initPoint;
       })
       .catch(() => setErro(true));
