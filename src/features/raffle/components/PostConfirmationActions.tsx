@@ -10,7 +10,7 @@ import { INSTAGRAM_URL } from "@/features/raffle/constants";
 export function PostConfirmationActions() {
   return (
     <div className="flex flex-col gap-2.5 sm:flex-row">
-      <Link to="/rifa/pagar" className="flex-1">
+      <Link to="/rifa" className="flex-1">
         <Button variant="secondary" className="w-full">
           Comprar outro número
         </Button>
