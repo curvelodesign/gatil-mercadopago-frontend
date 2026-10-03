@@ -49,7 +49,8 @@ gatil-frontend/
 │   │       ├── SuccessOverlay.tsx
 │   │       └── PostConfirmationActions.tsx   # "Comprar outro número" / "Voltar ao Instagram"
 │   └── pages/
-│       ├── PagarPage.tsx               # /rifa/pagar — gera preferência e redireciona
+│       ├── HomePage.tsx                # / — provisória até a landing page
+│       ├── PagarPage.tsx               # /rifa — gera preferência e redireciona
 │       ├── ChooseNumberPage.tsx        # /pagamento-aprovado — grade + formulário + "já escolhido"
 │       ├── PagamentoPendentePage.tsx   # /pagamento-pendente — típico do PIX sem auto_return
 │       ├── PagamentoRecusadoPage.tsx   # /pagamento-recusado
@@ -80,7 +81,9 @@ Pra testar o fluxo de pagamento de verdade em dev, o backend (e o próprio front
 
 | Caminho | Página | Quando chega aqui |
 |---|---|---|
-| `/rifa/pagar` | `PagarPage` | Link usado no Instagram/vídeo — gera uma preferência nova e redireciona pro Mercado Pago |
+| `/` | `HomePage` | Provisória até a landing page — leva pra `/rifa` e `/doar` |
+| `/rifa` | `PagarPage` | Link usado no Instagram/vídeo — gera uma preferência nova e redireciona pro Mercado Pago (`/rifa/pagar` continua funcionando como alias) |
+| `/doar` | `DoarPage` | Página de doação |
 | `/pagamento-aprovado?payment_id=` | `ChooseNumberPage` | `back_urls.success` — verifica o pagamento, mostra a grade e o formulário |
 | `/pagamento-pendente?payment_id=` | `PagamentoPendentePage` | `back_urls.pending` — típico do PIX, que não redireciona sozinho |
 | `/pagamento-recusado` | `PagamentoRecusadoPage` | `back_urls.failure`, ou qualquer falha real na verificação |
@@ -105,7 +108,7 @@ Playwright real, num navegador de verdade — mas **o backend nunca é chamado d
 
 **`pagina-escolher-numero.feature`**
 - Acesso com `payment_id` válido mostra a grade, com os números ocupados corretamente desabilitados e os livres clicáveis
-- Acesso sem `payment_id` redireciona pra `/rifa/pagar`
+- Acesso sem `payment_id` redireciona pra `/rifa`
 - Falha na verificação do pagamento redireciona pra `/pagamento-recusado`
 - Fluxo completo: selecionar número, preencher formulário, confirmar — chega na tela de sucesso com o número certo
 - **Se o backend responde 409 (número escolhido por outra pessoa durante o preenchimento), a mensagem de erro aparece e os campos do formulário não são apagados** — prova de que a pessoa não perde o que já digitou nesse cenário
@@ -114,7 +117,7 @@ Playwright real, num navegador de verdade — mas **o backend nunca é chamado d
 - Tela de pendente mostra a explicação do PIX e o botão de reverificar
 - Clicar em "verificar agora", com o pagamento já aprovado nesse meio tempo, redireciona pra escolha do número
 - Tela de recusado mostra a explicação e o botão de tentar de novo
-- "Tentar novamente" leva de volta pra `/rifa/pagar`, gerando um novo pagamento
+- "Tentar novamente" leva de volta pra `/rifa`, gerando um novo pagamento
 
 ## CI/CD
 
@@ -123,3 +126,5 @@ Playwright real, num navegador de verdade — mas **o backend nunca é chamado d
 ## Deploy (Vercel)
 
 Build estático (`vite build`), com `vercel.json` fazendo rewrite de qualquer rota pro `index.html` — necessário porque o React Router cuida do roteamento no cliente; sem isso, recarregar uma rota como `/pagamento-aprovado` direto dá 404 na Vercel.
+
+O domínio principal é `gatilirmafrancisca.org`. O `vercel.json` redireciona (301) o domínio antigo `rifasolidaria.gatilirmafrancisca.org`: a raiz vai pra `gatilirmafrancisca.org/rifa` e qualquer outro caminho é mantido (ex.: `/doar`, `/pagamento-aprovado?payment_id=...`), pra não quebrar links já divulgados.

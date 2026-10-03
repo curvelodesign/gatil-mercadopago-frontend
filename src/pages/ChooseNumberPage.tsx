@@ -32,7 +32,7 @@ interface LoaderData {
 export async function chooseNumberLoader({ request }: LoaderFunctionArgs): Promise<LoaderData> {
   const url = new URL(request.url);
   const paymentId = url.searchParams.get("payment_id");
-  if (!paymentId) throw redirect("/rifa/pagar");
+  if (!paymentId) throw redirect("/rifa");
 
   try {
     const { token } = await verificarPagamento(paymentId);

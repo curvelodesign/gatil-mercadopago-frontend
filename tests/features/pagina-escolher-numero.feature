@@ -11,7 +11,7 @@ Funcionalidade: Página de escolha do número (frontend)
 
   Cenário: Acesso sem payment_id redireciona para pagamento
     Quando eu acesso "/pagamento-aprovado" sem parâmetros
-    Então devo ser redirecionado para "/rifa/pagar"
+    Então devo ser redirecionado para "/rifa"
 
   Cenário: Verificação de pagamento falha e redireciona
     Dado que "/mercadopago/verificar-pagamento" devolve 402
