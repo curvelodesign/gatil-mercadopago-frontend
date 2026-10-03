@@ -9,8 +9,6 @@ import type {
   ParticipantFormData,
   ParticipantFormErrors,
 } from "@/features/raffle/types";
-import { TICKET_PRICE_BRL } from "../constants";
-import { trackEvent } from "@/lib/analytics/metaPixel";
 
 const EMPTY_FORM: ParticipantFormData = {
   fullName: "",
@@ -66,7 +64,6 @@ export function useRaffleForm({ selectedNumber, token }: UseRaffleFormArgs) {
         claimedNumber: selectedNumber,
       });
       setConfirmedNumber(result.claimedNumber);
-      trackEvent("Purchase", { value: TICKET_PRICE_BRL, currency: "BRL" });
     } catch (err: any) {
       if (err?.status === 409) {
         setSubmitError(

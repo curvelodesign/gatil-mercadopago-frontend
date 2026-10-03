@@ -23,7 +23,7 @@ export function PagamentoRecusadoPage() {
           Você pode tentar de novo, com o mesmo cartão ou com PIX.
         </p>
 
-        <Link to="/rifa/pagar">
+        <Link to="/rifa">
           <Button className="w-full">Tentar novamente</Button>
         </Link>
       </Card>

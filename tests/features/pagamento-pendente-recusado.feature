@@ -20,4 +20,4 @@ Funcionalidade: Telas de pendente e recusado
   Cenário: Clicar em "tentar novamente" gera novo pagamento
     Dado que estou em "/pagamento-recusado"
     Quando eu clico em "Tentar novamente"
-    Então devo ser redirecionado para "/rifa/pagar"
+    Então devo ser redirecionado para "/rifa"

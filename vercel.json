@@ -1,4 +1,18 @@
 {
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "rifasolidaria.gatilirmafrancisca.org" }],
+      "destination": "https://gatilirmafrancisca.org/rifa",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "rifasolidaria.gatilirmafrancisca.org" }],
+      "destination": "https://gatilirmafrancisca.org/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
