@@ -1,19 +1,24 @@
-import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { CampaignLayout } from "@/app/CampaignLayout";
 import { DonationFooter } from "@/components/layout/DonationFooter";
 import { DonationHeader } from "@/components/layout/DonationHeader";
-import { initMetaPixel, trackPageView } from "@/lib/analytics/metaPixel";
+import { CookieConsent } from "@/features/landing-doacao/CookieConsent";
+import { useRastreamento } from "@/lib/analytics/rastreamento";
+import "@/features/landing-doacao/landing.css";
 
+// Páginas de retorno do pagamento. O rastreamento mede só a campanha de doação,
+// por isso vive aqui e no LandingLayout, e não no RootLayout; e só depois do
+// consentimento de cookies.
 export function DonationLayout() {
-  const location = useLocation();
+  const { pathname } = useLocation();
+  useRastreamento(pathname);
 
-  // O Meta Pixel mede só a campanha de doação — por isso vive aqui e
-  // não no RootLayout.
-  useEffect(() => {
-    initMetaPixel();
-    trackPageView();
-  }, [location.pathname]);
-
-  return <CampaignLayout header={<DonationHeader />} footer={<DonationFooter />} />;
+  return (
+    <>
+      <CampaignLayout header={<DonationHeader />} footer={<DonationFooter />} />
+      <div className="lp">
+        <CookieConsent />
+      </div>
+    </>
+  );
 }

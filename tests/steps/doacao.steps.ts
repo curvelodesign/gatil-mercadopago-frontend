@@ -1,7 +1,24 @@
 import { createBdd } from "playwright-bdd";
-import { expect } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then, Before } = createBdd();
+
+// O aviso de cookies aparece na primeira visita e ficaria por cima dos botões:
+// cada cenário começa com uma escolha já registrada (nenhum rastreamento).
+Before(async ({ page }) => {
+  await page.addInitScript(() =>
+    localStorage.setItem("gatil_cookie_consent", JSON.stringify({ stats: false, marketing: false, timestamp: Date.now() }))
+  );
+});
+
+// Na landing, o valor é escolhido numa janela que abre pelo botão "Quero doar".
+async function abrirJanelaDeDoacao(page: Page) {
+  const janela = page.getByRole("dialog", { name: "Qual valor deseja doar?" });
+  if (!(await janela.isVisible())) {
+    await page.getByRole("button", { name: "Quero doar 💛" }).first().click();
+  }
+  await expect(janela).toBeVisible();
+}
 
 // ---------- mocks de rede ----------
 
@@ -44,8 +61,9 @@ Given("que {string} devolve erro 500", async ({ page }, endpoint: string) => {
 When(
   "eu seleciono o valor pré-definido de R$ {int}",
   async ({ page }, valor: number) => {
+    await abrirJanelaDeDoacao(page);
     await page
-      .getByRole("button", { name: new RegExp(`R\\$\\s*${valor},00`) })
+      .getByRole("button", { name: new RegExp(`^R\\$\\s*${valor}(,00)?$`) })
       .click();
   }
 );
@@ -53,7 +71,8 @@ When(
 When(
   "eu digito {string} no campo de valor da doação",
   async ({ page }, valor: string) => {
-    await page.getByLabel("Valor da doação (R$)").fill(valor);
+    await abrirJanelaDeDoacao(page);
+    await page.getByLabel("Outro valor").fill(valor);
   }
 );
 

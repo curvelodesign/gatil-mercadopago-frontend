@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { criarPagamentoDoacao } from "@/lib/api/doacao";
 import { MIN_DONATION_AMOUNT } from "@/features/donation/constants";
-import { trackEvent } from "@/lib/analytics/metaPixel";
+import { registrarInicioDoacao } from "@/lib/analytics/rastreamento";
+import { utmsAceitas } from "@/features/donation/utm";
 
 interface UseDonationFormArgs {
   utm: {
@@ -49,11 +50,9 @@ export function useDonationForm({ utm }: UseDonationFormArgs) {
     try {
       const { initPoint } = await criarPagamentoDoacao({
         valor: numericAmount,
-        utmSource: utm.utmSource,
-        utmMedium: utm.utmMedium,
-        utmCampaign: utm.utmCampaign,
+        ...utmsAceitas(utm),
       });
-      trackEvent("Donate", { value: numericAmount, currency: "BRL" });
+      registrarInicioDoacao(numericAmount);
       window.location.href = initPoint;
     } catch {
       setSubmitError(

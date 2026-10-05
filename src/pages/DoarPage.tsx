@@ -1,47 +1,44 @@
-import { Card } from "@/components/ui/Card";
-import { DonationForm } from "@/features/donation/components/DonationForm";
-import { useDonationForm } from "@/features/donation/hooks/useDonationForm";
-import { useUtmParams } from "@/hooks/useUtmParams";
+import { useEffect, useState } from "react";
+import { Topo } from "@/features/landing-doacao/secoes/Topo";
+import { Meta } from "@/features/landing-doacao/secoes/Meta";
+import { Sobre } from "@/features/landing-doacao/secoes/Sobre";
+import { Impacto } from "@/features/landing-doacao/secoes/Impacto";
+import { Confianca } from "@/features/landing-doacao/secoes/Confianca";
+import { Chamada } from "@/features/landing-doacao/secoes/Chamada";
+import { Turma } from "@/features/landing-doacao/secoes/Turma";
+import { Destino } from "@/features/landing-doacao/secoes/Destino";
+import { Acompanhe } from "@/features/landing-doacao/secoes/Acompanhe";
+import { Perguntas } from "@/features/landing-doacao/secoes/Perguntas";
+import { BarraDoacao } from "@/features/landing-doacao/BarraDoacao";
+import { JanelaDoacao } from "@/features/landing-doacao/JanelaDoacao";
+import { JanelaSaida } from "@/features/landing-doacao/JanelaSaida";
 
+// Os textos usam espaço inquebrável (&nbsp;) depois de palavras curtas e números,
+// para nenhuma linha terminar em "a", "de", "com", "300"... Ao editar um texto,
+// mantenha esse cuidado.
 export function DoarPage() {
-  const utm = useUtmParams();
-  const {
-    selectedAmount,
-    customAmount,
-    isAmountValid,
-    isSubmitting,
-    submitError,
-    selectPreset,
-    updateCustomAmount,
-    submit,
-  } = useDonationForm({ utm });
+  const [doacao, setDoacao] = useState<{ aberta: boolean; valor?: number }>({ aberta: false });
+  const abrirDoacao = (valor?: number) => setDoacao({ aberta: true, valor });
+
+  useEffect(() => {
+    document.title = "Gatil Irmã Francisca - Ajude a cuidar de 300 gatos";
+  }, []);
 
   return (
-    <div className="mx-auto max-w-md px-4 py-12">
-      <div className="mb-6 text-center">
-        <div className="mx-auto mb-3.5 flex h-14 w-14 items-center justify-center rounded-full bg-laranja/15 text-2xl">
-          🐾
-        </div>
-        <h1 className="mb-2 font-display text-3xl font-bold text-verde-escuro">
-          Fazer uma doação
-        </h1>
-        <p className="text-sm text-carvao/70">
-          Toda contribuição ajuda a cuidar dos gatos do Gatil Irmã Francisca.
-        </p>
-      </div>
-
-      <Card>
-        <DonationForm
-          selectedAmount={selectedAmount}
-          customAmount={customAmount}
-          isAmountValid={isAmountValid}
-          isSubmitting={isSubmitting}
-          submitError={submitError}
-          onSelectPreset={selectPreset}
-          onCustomAmountChange={updateCustomAmount}
-          onSubmit={submit}
-        />
-      </Card>
-    </div>
+    <>
+      <Topo onDoar={abrirDoacao} />
+      <Meta onDoar={abrirDoacao} />
+      <Sobre />
+      <Impacto onDoar={abrirDoacao} />
+      <Confianca />
+      <Chamada onDoar={abrirDoacao} />
+      <Turma onDoar={abrirDoacao} />
+      <Destino onDoar={abrirDoacao} />
+      <Acompanhe />
+      <Perguntas onDoar={abrirDoacao} />
+      <BarraDoacao onDoar={() => abrirDoacao()} escondida={doacao.aberta} />
+      <JanelaDoacao aberta={doacao.aberta} valorInicial={doacao.valor} onFechar={() => setDoacao({ aberta: false })} />
+      <JanelaSaida onDoar={abrirDoacao} />
+    </>
   );
 }
