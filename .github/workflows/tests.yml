@@ -8,6 +8,8 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
+    env:
+      VITE_API_URL: /api
 
     continue-on-error: true
     steps:
