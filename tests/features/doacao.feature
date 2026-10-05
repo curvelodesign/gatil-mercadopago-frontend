@@ -41,3 +41,13 @@ Funcionalidade: Página de doação avulsa (frontend)
     Quando eu acesso "/doacao-recusada"
     Então devo ver o título "Essa doação não foi concluída"
     E devo ver um botão "Tentar novamente"
+
+  Cenário: A barra da meta acompanha o total arrecadado no mês
+    Dado que o total arrecadado do mês é R$ 7500
+    Quando eu acesso "/doar"
+    Então a barra da meta deve mostrar 50% preenchido
+
+  Cenário: Sem o total do mês, a barra da meta não aparece
+    Dado que o total arrecadado do mês não está disponível
+    Quando eu acesso "/doar"
+    Então a barra da meta não deve aparecer

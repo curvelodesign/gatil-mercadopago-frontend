@@ -102,3 +102,38 @@ Then(
     await expect(page.getByRole("button", { name: texto })).toBeDisabled();
   }
 );
+
+// Barra da meta: o total do mês vem de /api/doacao/arrecadado-mes
+Given(
+  "que o total arrecadado do mês é R$ {int}",
+  async ({ page }, total: number) => {
+    await page.route("**/api/doacao/arrecadado-mes", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "ok", data: { total } }),
+      })
+    );
+  }
+);
+
+Given("que o total arrecadado do mês não está disponível", async ({ page }) => {
+  await page.route("**/api/doacao/arrecadado-mes", (route) =>
+    route.fulfill({ status: 500, body: "{}" })
+  );
+});
+
+Then(
+  "a barra da meta deve mostrar {int}% preenchido",
+  async ({ page }, porcentagem: number) => {
+    await expect(
+      page.getByRole("progressbar", { name: "Progresso da meta" })
+    ).toHaveAttribute("value", String(porcentagem));
+  }
+);
+
+Then("a barra da meta não deve aparecer", async ({ page }) => {
+  await expect(
+    page.getByRole("progressbar", { name: "Progresso da meta" })
+  ).toHaveCount(0);
+});
