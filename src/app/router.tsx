@@ -33,9 +33,9 @@ export const router = createBrowserRouter([
           { path: "rifa", element: <PagarPage /> },
           // Alias mantido pros links antigos já divulgados.
           { path: "rifa/pagar", element: <PagarPage /> },
-          { path: "pagamento-aprovado", element: <ChooseNumberPage />, loader: chooseNumberLoader },
-          { path: "pagamento-pendente", element: <PagamentoPendentePage /> },
-          { path: "pagamento-recusado", element: <PagamentoRecusadoPage /> },
+          { path: "rifa/pagamento-aprovado", element: <ChooseNumberPage />, loader: chooseNumberLoader },
+          { path: "rifa/pagamento-pendente", element: <PagamentoPendentePage /> },
+          { path: "rifa/pagamento-recusado", element: <PagamentoRecusadoPage /> },
         ],
       },
       {
@@ -50,9 +50,11 @@ export const router = createBrowserRouter([
       {
         element: <DonationLayout />,
         children: [
-          { path: "doacao-confirmada", element: <DoacaoConfirmadaPage /> },
-          { path: "doacao-pendente", element: <DoacaoPendentePage /> },
-          { path: "doacao-recusada", element: <DoacaoRecusadaPage /> },
+          // Retorno do checkout da doação (back_urls do backend). Ficam sob /doar,
+          // separadas das da rifa; os caminhos antigos /doacao-* não existem mais.
+          { path: "doar/pagamento-aprovado", element: <DoacaoConfirmadaPage /> },
+          { path: "doar/pagamento-pendente", element: <DoacaoPendentePage /> },
+          { path: "doar/pagamento-recusado", element: <DoacaoRecusadaPage /> },
         ],
       },
       { path: "*", element: <NotFoundPage /> },

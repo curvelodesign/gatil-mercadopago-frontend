@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { verificarPagamento } from "@/lib/api/mercadoPago";
 import { useOrderParams } from "@/hooks/useOrderParams";
 import { ApiRequestError } from "@/types/api";
+import { RAFFLE_ROUTES } from "@/features/raffle/constants";
 
 export function PagamentoPendentePage() {
   const navigate = useNavigate();
@@ -19,12 +20,12 @@ export function PagamentoPendentePage() {
 
     try {
       await verificarPagamento(paymentId);
-      navigate(`/pagamento-aprovado?payment_id=${paymentId}`);
+      navigate(`${RAFFLE_ROUTES.aprovado}?payment_id=${paymentId}`);
     } catch (err) {
       // 409 = esse pagamento já escolheu um número; a página de
       // aprovado mostra a confirmação em vez de tratar como erro.
       if (err instanceof ApiRequestError && err.status === 409) {
-        navigate(`/pagamento-aprovado?payment_id=${paymentId}`);
+        navigate(`${RAFFLE_ROUTES.aprovado}?payment_id=${paymentId}`);
         return;
       }
       setCheckError(

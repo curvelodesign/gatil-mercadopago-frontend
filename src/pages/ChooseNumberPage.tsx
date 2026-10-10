@@ -17,6 +17,7 @@ import { useOrderParams } from "@/hooks/useOrderParams";
 import {
   PRIZE_VALUE_BRL,
   RAFFLE_DATE_LABEL,
+  RAFFLE_ROUTES,
   TICKET_PRICE_BRL,
   TOTAL_NUMBERS,
 } from "@/features/raffle/constants";
@@ -46,7 +47,7 @@ export async function chooseNumberLoader({ request }: LoaderFunctionArgs): Promi
       }
     }
     // Qualquer outro erro (pagamento não aprovado, etc.) é recusa de verdade.
-    throw redirect("/pagamento-recusado");
+    throw redirect(RAFFLE_ROUTES.recusado);
   }
 }
 

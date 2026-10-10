@@ -112,6 +112,13 @@ Then(
   }
 );
 
+// Os caminhos antigos /doacao-* não podem redirecionar pra lugar nenhum:
+// a URL tem que continuar exatamente a mesma.
+Then("devo continuar em {string}", async ({ page }, caminho: string) => {
+  const url = new URL(page.url());
+  expect(`${url.pathname}${url.search}`).toBe(caminho);
+});
+
 Then(
   "o botão {string} deve estar desabilitado",
   async ({ page }, texto: string) => {

@@ -73,8 +73,13 @@ Given("que estou em {string}", async ({ page }, caminho: string) => {
 });
 
 Then("devo ser redirecionado para {string}", async ({ page }, caminhoEsperado: string) => {
-  const escapado = caminhoEsperado.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  await expect(page).toHaveURL(new RegExp(escapado));
+  // Compara caminho + query exatos: "/rifa" não pode aceitar "/rifa/pagamento-aprovado"
+  await expect
+    .poll(() => {
+      const url = new URL(page.url());
+      return `${url.pathname}${url.search}`;
+    })
+    .toBe(caminhoEsperado);
 });
 
 // ---------- asserts de conteúdo ----------
@@ -96,6 +101,14 @@ Then(
 Then("o número {int} deve estar clicável", async ({ page }, numero: number) => {
   const celula = page.getByRole("button", { name: new RegExp(`Número ${numero},`) });
   await expect(celula).toBeEnabled();
+});
+
+Then("não devo ver o título {string}", async ({ page }, titulo: string) => {
+  await expect(page.getByRole("heading", { name: titulo })).toHaveCount(0);
+});
+
+Then("não devo ver o botão {string}", async ({ page }, texto: string) => {
+  await expect(page.getByRole("button", { name: texto })).toHaveCount(0);
 });
 
 Then("devo ver um botão {string}", async ({ page }, texto: string) => {
@@ -135,7 +148,7 @@ Given("que estou na página de escolha com um token válido", async ({ page }) =
     });
   });
 
-  await page.goto("/pagamento-aprovado?payment_id=999050&status=approved");
+  await page.goto("/rifa/pagamento-aprovado?payment_id=999050&status=approved");
   await expect(page.getByRole("heading", { name: "Escolha seu número da sorte" })).toBeVisible();
 });
 
