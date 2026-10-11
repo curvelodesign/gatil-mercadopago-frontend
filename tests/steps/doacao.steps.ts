@@ -293,3 +293,8 @@ Then("devo ser levado para o agradecimento quando o Pix for aprovado", async ({ 
   await expect(page).toHaveURL(/\/doar\/pagamento-aprovado$/, { timeout: 10_000 });
   await expect(page.getByRole("heading", { name: /Muito obrigado/ })).toBeVisible();
 });
+
+Then("não devo ver a pergunta se concluí a doação", async ({ page }) => {
+  await expect(page.getByRole("heading", { name: /Quero doar|Dez anos/ }).first()).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Você concluiu sua doação?" })).toHaveCount(0);
+});

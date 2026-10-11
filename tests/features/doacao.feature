@@ -146,3 +146,9 @@ Funcionalidade: Página de doação avulsa (frontend)
     E escolho pagar com cartão
     E eu clico em "Doar agora 💛"
     Então devo ser redirecionado para o link de pagamento do Mercado Pago
+
+  Cenário: Com o Pix dentro do site ligado, a volta do Mercado Pago não pergunta se concluiu
+    Dado que o Pix dentro do site está ligado
+    E que comecei uma doação e voltei do Mercado Pago
+    Quando eu acesso "/doar"
+    Então não devo ver a pergunta se concluí a doação
