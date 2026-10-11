@@ -160,3 +160,136 @@ Then("a barra da meta não deve aparecer", async ({ page }) => {
     page.getByRole("progressbar", { name: "Progresso da meta" })
   ).toHaveCount(0);
 });
+
+// Volta do Mercado Pago pelo "voltar" (Pix): a landing pergunta se o Pix foi feito
+Given("que comecei uma doação e voltei do Mercado Pago", async ({ page }) => {
+  await page.addInitScript(() => {
+    if (location.pathname === "/doar") sessionStorage.setItem("gatil_doacao_iniciada", String(Date.now()));
+  });
+});
+
+When("confirmo que já fiz o Pix", async ({ page }) => {
+  await page.getByRole("dialog", { name: "Você concluiu sua doação?" }).getByRole("button", { name: /já fiz o Pix/ }).click();
+});
+
+Then("devo ver a página de agradecimento", async ({ page }) => {
+  await expect(page).toHaveURL(/\/doar\/pagamento-aprovado$/);
+  await expect(page.getByRole("heading", { name: /Muito obrigado/ })).toBeVisible();
+});
+
+// Nas páginas de retorno, as ações que levam a outra página são links
+Then("devo ver um link {string}", async ({ page }, texto: string) => {
+  await expect(page.getByRole("link", { name: texto })).toBeVisible();
+});
+
+// Rodapé: ao abrir outra página, ela começa do topo (e não no rodapé)
+When("rolo até o rodapé e clico em {string}", async ({ page }, texto: string) => {
+  const link = page.locator("footer").getByRole("link", { name: texto });
+  await link.scrollIntoViewIfNeeded();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(500);
+  await link.click();
+});
+
+Then("a página deve começar do topo", async ({ page }) => {
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+});
+
+// ---------- Pix dentro do site ----------
+
+// PNG 1x1: o QR code de verdade vem do Mercado Pago
+const QR_TESTE =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+const CODIGO_PIX_TESTE = "00020126580014br.gov.bcb.pix0136TESTE-gatil-irma-francisca";
+const pedidosPix = new WeakMap<Page, Record<string, unknown>>();
+
+Given("que o Pix dentro do site está ligado", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("gatil_pix_no_site", "1"));
+});
+
+Given("que {string} devolve um Pix válido", async ({ page }, endpoint: string) => {
+  await page.route(`**${endpoint}**`, (route) => {
+    pedidosPix.set(page, route.request().postDataJSON());
+    return route.fulfill({
+      json: {
+        message: "Pix criado.",
+        data: {
+          paymentId: 123456789,
+          rastreioId: "rastreio-teste",
+          qrCode: CODIGO_PIX_TESTE,
+          qrCodeBase64: QR_TESTE,
+          expiraEm: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+        },
+      },
+    });
+  });
+});
+
+Given("que o status do Pix fica {string}", async ({ page }, status: string) => {
+  await page.route("**/api/doacao/status/**", (route) =>
+    route.fulfill({ json: { message: "ok", data: { status } } })
+  );
+});
+
+Given(
+  "que o status do Pix fica {string} e depois {string}",
+  async ({ page }, primeiro: string, depois: string) => {
+    let consultas = 0;
+    await page.route("**/api/doacao/status/**", (route) => {
+      consultas += 1;
+      const url = new URL(route.request().url());
+      // O front manda o rastreioId junto, pra não dar pra consultar Pix de outra pessoa
+      expect(url.pathname).toMatch(/\/doacao\/status\/123456789$/);
+      expect(url.searchParams.get("ref")).toBe("rastreio-teste");
+      return route.fulfill({ json: { message: "ok", data: { status: consultas === 1 ? primeiro : depois } } });
+    });
+  }
+);
+
+When("digito o e-mail {string}", async ({ page }, email: string) => {
+  await page.getByLabel("Seu e-mail").fill(email);
+});
+
+When("informo o e-mail {string} e gero o Pix", async ({ page }, email: string) => {
+  await page.getByLabel("Seu e-mail").fill(email);
+  await page.getByRole("button", { name: /Gerar Pix de/ }).click();
+});
+
+When("escolho pagar com cartão", async ({ page }) => {
+  await page.getByRole("radio", { name: /Cartão/ }).click();
+});
+
+Then("não devo ver a escolha da forma de pagamento", async ({ page }) => {
+  await expect(page.getByRole("radiogroup")).toHaveCount(0);
+});
+
+Then("devo ver o botão {string}", async ({ page }, texto: string) => {
+  await expect(page.getByRole("button", { name: texto })).toBeVisible();
+});
+
+Then("o botão de gerar o Pix deve estar desabilitado", async ({ page }) => {
+  await expect(page.getByRole("button", { name: /Gerar Pix de/ })).toBeDisabled();
+});
+
+Then("devo ver o QR code e o código copia e cola do Pix", async ({ page }) => {
+  await expect(page.getByRole("img", { name: "QR code do Pix" })).toBeVisible();
+  await expect(page.getByText(CODIGO_PIX_TESTE)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copiar código" })).toBeVisible();
+});
+
+Then(
+  "o Pix deve ter sido pedido com o valor {int}, o e-mail {string} e a origem {string}",
+  async ({ page }, valor: number, email: string, origem: string) => {
+    const pedido = pedidosPix.get(page);
+    expect(pedido?.valor).toBe(valor);
+    expect(pedido?.email).toBe(email);
+    expect(pedido?.utmSource).toBe(origem);
+  }
+);
+
+Then("devo ser levado para o agradecimento quando o Pix for aprovado", async ({ page }) => {
+  // 1ª consulta: pendente; a seguinte (~4s depois): aprovado; e ~2s mostrando "chegou!"
+  await expect(page.getByRole("heading", { name: /chegou!/ })).toBeVisible({ timeout: 10_000 });
+  await expect(page).toHaveURL(/\/doar\/pagamento-aprovado$/, { timeout: 10_000 });
+  await expect(page.getByRole("heading", { name: /Muito obrigado/ })).toBeVisible();
+});

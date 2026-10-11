@@ -1,37 +1,35 @@
 import { Link } from "react-router-dom";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
+import imgCatAcerola from "@/assets/doacao/cat-acerola.webp";
 import { DONATION_INSTAGRAM_URL } from "@/features/donation/constants";
+import { compartilhar } from "@/features/landing-doacao/compartilhar";
+import { TelaRetorno } from "@/features/landing-doacao/TelaRetorno";
 
 export function DoacaoConfirmadaPage() {
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-lg flex-col items-center justify-center px-4 py-16 text-center">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-verde/15 text-3xl">
-        🐾
-      </div>
-      <h1 className="mb-3 font-display text-3xl font-bold text-verde-escuro">
-        Muito obrigado pela sua doação!
-      </h1>
-      <Card className="mb-6 w-full text-sm leading-relaxed text-carvao/80">
-        Sua contribuição foi recebida e vai direto para o cuidado dos gatos
-        do Gatil Irmã Francisca. Você receberá a confirmação do pagamento
-        pelo Mercado Pago.
-      </Card>
-      <div className="flex w-full flex-col gap-2.5 sm:flex-row">
-        <Link to="/doar" className="flex-1">
-          <Button variant="secondary" className="w-full">
+    <TelaRetorno
+      tituloAba="Obrigado pela doação"
+      rotulo="Doação&nbsp;recebida"
+      titulo="Muito obrigado pela&nbsp;sua&nbsp;doação!"
+      gato={imgCatAcerola}
+      acoes={
+        <>
+          <a className="botao botao-laranja botao-bloco" href={DONATION_INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+            Seguir no&nbsp;Instagram
+          </a>
+          <button className="botao botao-contorno botao-bloco" type="button" onClick={compartilhar}>
+            🔗&nbsp;Compartilhar
+          </button>
+          <Link className="link-botao" to="/doar">
             Fazer outra doação
-          </Button>
-        </Link>
-        <a
-          href={DONATION_INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1"
-        >
-          <Button className="w-full">Voltar ao Instagram</Button>
-        </a>
-      </div>
-    </div>
+          </Link>
+        </>
+      }
+    >
+      <p>
+        Sua contribuição vai direto para&nbsp;o&nbsp;cuidado dos&nbsp;cerca de&nbsp;300&nbsp;gatos do&nbsp;Gatil:
+        comida, saúde e&nbsp;teto, todos os&nbsp;dias.
+      </p>
+      <p>A&nbsp;confirmação do&nbsp;pagamento chega pelo&nbsp;Mercado Pago.</p>
+    </TelaRetorno>
   );
 }

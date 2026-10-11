@@ -35,3 +35,13 @@ export function registrarInicioDoacao(valor: number) {
   trackEvent("InitiateCheckout", { value: valor, currency: "BRL" });
   gaEvent("generate_lead", { value: valor, currency: "BRL" });
 }
+
+/**
+ * Doação concluída no site (Pix aprovado na própria janela). O eventID é o
+ * rastreioId, o mesmo event_id que o backend manda pra Meta quando o
+ * Mercado Pago confirma o pagamento: assim a Meta conta uma doação só.
+ */
+export function registrarDoacaoConcluida(valor: number, rastreioId: string) {
+  trackEvent("Donate", { value: valor, currency: "BRL" }, { eventID: rastreioId });
+  gaEvent("purchase", { transaction_id: rastreioId, value: valor, currency: "BRL" });
+}

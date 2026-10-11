@@ -12,6 +12,7 @@ import { Perguntas } from "@/features/landing-doacao/secoes/Perguntas";
 import { BarraDoacao } from "@/features/landing-doacao/BarraDoacao";
 import { JanelaDoacao } from "@/features/landing-doacao/JanelaDoacao";
 import { JanelaSaida } from "@/features/landing-doacao/JanelaSaida";
+import { JanelaRetorno } from "@/features/landing-doacao/JanelaRetorno";
 
 // Os textos usam espaço inquebrável (&nbsp;) depois de palavras curtas e números,
 // para nenhuma linha terminar em "a", "de", "com", "300"... Ao editar um texto,
@@ -39,6 +40,7 @@ export function DoarPage() {
       <BarraDoacao onDoar={() => abrirDoacao()} escondida={doacao.aberta} />
       <JanelaDoacao aberta={doacao.aberta} valorInicial={doacao.valor} onFechar={() => setDoacao({ aberta: false })} />
       <JanelaSaida onDoar={abrirDoacao} />
+      <JanelaRetorno onDoar={() => abrirDoacao()} />
     </>
   );
 }

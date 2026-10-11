@@ -180,7 +180,8 @@ When("eu clico em {string}", async ({ page }, texto: string) => {
       await page.getByLabel("E-mail").fill("teste@exemplo.com");
     }
   }
-  await page.getByRole("button", { name: texto }).click();
+  // Ações que levam a outra página são links (ex.: "Tentar novamente" na doação)
+  await page.getByRole("button", { name: texto }).or(page.getByRole("link", { name: texto })).first().click();
 });
 
 Then("devo ver a mensagem de sucesso com o número {int}", async ({ page }, numero: number) => {

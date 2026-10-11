@@ -12,6 +12,8 @@ export function Perguntas({ onDoar }: { onDoar: (valor?: number) => void }) {
               <p>
                 Sim! O&nbsp;pagamento é&nbsp;processado via&nbsp;Mercado Pago, em&nbsp;ambiente criptografado.
                 O&nbsp;Gatil Irmã Francisca opera com&nbsp;CNPJ <span className="nowrap">25.382.038/0001-05</span>.
+                No&nbsp;Pix, o&nbsp;recebedor aparece como Ana&nbsp;Paula de&nbsp;Sousa Farias, responsável legal
+                pelo&nbsp;Gatil.
               </p>
             </details>
             <details className="faq__item" name="faq">

@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-import { DonationLayout } from "@/app/DonationLayout";
 import { LandingLayout } from "@/app/LandingLayout";
 import { HomeLayout } from "@/app/HomeLayout";
 import { RaffleLayout } from "@/app/RaffleLayout";
@@ -45,13 +44,8 @@ export const router = createBrowserRouter([
           { path: "doar", element: <DoarPage /> },
           { path: "politica-de-privacidade", element: <PoliticaPrivacidadePage /> },
           { path: "termos", element: <TermosPage /> },
-        ],
-      },
-      {
-        element: <DonationLayout />,
-        children: [
-          // Retorno do checkout da doação (back_urls do backend). Ficam sob /doar,
-          // separadas das da rifa; os caminhos antigos /doacao-* não existem mais.
+          // Retorno do checkout da doação (back_urls do backend): ficam sob /doar,
+          // separadas das da rifa, com o mesmo visual, aviso de cookies e rastreamento.
           { path: "doar/pagamento-aprovado", element: <DoacaoConfirmadaPage /> },
           { path: "doar/pagamento-pendente", element: <DoacaoPendentePage /> },
           { path: "doar/pagamento-recusado", element: <DoacaoRecusadaPage /> },

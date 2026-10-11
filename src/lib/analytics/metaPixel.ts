@@ -57,6 +57,12 @@ export function trackPageView() {
   callFbq("track", "PageView");
 }
 
-export function trackEvent(event: PixelEvent, params?: Record<string, unknown>) {
-  callFbq("track", event, params);
+export function trackEvent(
+  event: PixelEvent,
+  params?: Record<string, unknown>,
+  opcoes?: { eventID?: string },
+) {
+  // O eventID permite à Meta juntar o evento do navegador com o do servidor (Conversions API)
+  if (opcoes) callFbq("track", event, params, opcoes);
+  else callFbq("track", event, params);
 }
