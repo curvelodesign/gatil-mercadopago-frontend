@@ -36,19 +36,52 @@ Funcionalidade: Página de doação avulsa (frontend)
     E eu clico em "Doar agora"
     Então devo ver a mensagem "Não conseguimos abrir o pagamento agora. Tenta de novo em instantes."
 
-  Cenário: Tela de doação confirmada mostra agradecimento
-    Quando eu acesso "/doacao-confirmada"
+  Cenário: Tela de doação aprovada mostra agradecimento
+    Quando eu acesso "/doar/pagamento-aprovado?payment_id=999060&status=approved"
     Então devo ver o título "Muito obrigado pela sua doação!"
     E devo ver um botão "Fazer outra doação"
 
+  Cenário: "Fazer outra doação" volta para a landing de doação
+    Dado que estou em "/doar/pagamento-aprovado?payment_id=999060&status=approved"
+    Quando eu clico em "Fazer outra doação"
+    Então devo ser redirecionado para "/doar"
+
   Cenário: Tela de doação pendente explica o PIX
-    Quando eu acesso "/doacao-pendente"
+    Quando eu acesso "/doar/pagamento-pendente?payment_id=999061&status=pending"
     Então devo ver o título "Recebemos sua doação"
 
   Cenário: Tela de doação recusada permite tentar novamente
-    Quando eu acesso "/doacao-recusada"
+    Quando eu acesso "/doar/pagamento-recusado?payment_id=999062&status=rejected"
     Então devo ver o título "Essa doação não foi concluída"
     E devo ver um botão "Tentar novamente"
+
+  Cenário: "Tentar novamente" volta para a landing de doação
+    Dado que estou em "/doar/pagamento-recusado"
+    Quando eu clico em "Tentar novamente"
+    Então devo ser redirecionado para "/doar"
+
+  Esquema do Cenário: Os caminhos antigos de retorno da doação não existem mais
+    Quando eu acesso "<caminho>"
+    Então devo ver o título "Página não encontrada"
+    E devo continuar em "<caminho>"
+    E não devo ver o título "<titulo>"
+
+    Exemplos:
+      | caminho            | titulo                          |
+      | /doacao-confirmada | Muito obrigado pela sua doação! |
+      | /doacao-pendente   | Recebemos sua doação            |
+      | /doacao-recusada   | Essa doação não foi concluída   |
+
+  Esquema do Cenário: As telas de retorno da doação não existem fora de /doar
+    Quando eu acesso "<caminho>"
+    Então devo ver o título "Página não encontrada"
+    E não devo ver o título "<titulo>"
+
+    Exemplos:
+      | caminho             | titulo                          |
+      | /pagamento-aprovado | Muito obrigado pela sua doação! |
+      | /pagamento-pendente | Recebemos sua doação            |
+      | /pagamento-recusado | Essa doação não foi concluída   |
 
   Cenário: A barra da meta acompanha o total arrecadado no mês
     Dado que o total arrecadado do mês é R$ 7500

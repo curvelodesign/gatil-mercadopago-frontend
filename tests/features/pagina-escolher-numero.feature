@@ -4,19 +4,25 @@ Funcionalidade: Página de escolha do número (frontend)
   Cenário: Acesso com payment_id válido mostra a grade
     Dado que "/mercadopago/verificar-pagamento" devolve um token válido
     E "/api/rifa/numeros-ocupados" devolve [3, 47, 201]
-    Quando eu acesso "/pagamento-aprovado?payment_id=999030&status=approved"
+    Quando eu acesso "/rifa/pagamento-aprovado?payment_id=999030&status=approved"
     Então devo ver o título "Escolha seu número da sorte"
     E os números 3, 47 e 201 devem aparecer marcados como indisponíveis
     E o número 10 deve estar clicável
 
   Cenário: Acesso sem payment_id redireciona para pagamento
-    Quando eu acesso "/pagamento-aprovado" sem parâmetros
+    Quando eu acesso "/rifa/pagamento-aprovado" sem parâmetros
     Então devo ser redirecionado para "/rifa"
 
   Cenário: Verificação de pagamento falha e redireciona
     Dado que "/mercadopago/verificar-pagamento" devolve 402
-    Quando eu acesso "/pagamento-aprovado?payment_id=999031"
-    Então devo ser redirecionado para "/pagamento-recusado"
+    Quando eu acesso "/rifa/pagamento-aprovado?payment_id=999031"
+    Então devo ser redirecionado para "/rifa/pagamento-recusado"
+
+  Cenário: Tela de escolha do número não existe fora de /rifa
+    Dado que "/mercadopago/verificar-pagamento" devolve um token válido
+    Quando eu acesso "/pagamento-aprovado?payment_id=999032&status=approved"
+    Então devo ver o título "Página não encontrada"
+    E não devo ver o título "Escolha seu número da sorte"
 
   Cenário: Escolher um número e confirmar com sucesso
     Dado que estou na página de escolha com um token válido

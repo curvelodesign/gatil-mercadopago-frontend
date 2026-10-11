@@ -460,8 +460,8 @@ html[data-aviso-cookies] .lp .barra { visibility: hidden; }
  }
 .lp .meta__barra { display: block; width: 100%; appearance: none; -webkit-appearance: none; }
 .lp .meta__barra::-webkit-progress-bar { background: var(--creme); }
-.lp .meta__barra::-webkit-progress-value { background: var(--laranja); }
-.lp .meta__barra::-moz-progress-bar { background: var(--laranja); }
+.lp .meta__barra::-webkit-progress-value { background: var(--verde); }
+.lp .meta__barra::-moz-progress-bar { background: var(--verde); }
 .lp .janela__corpo--sem-gato { margin-top: 0; }
 .lp .preferencias__salvar { margin-top: 16px; }
 .lp .preferencias__recusar { margin: 10px 0 0; text-align: center; }
