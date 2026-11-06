@@ -96,7 +96,7 @@ export function CheckoutAcao() {
     conteudo = (
       <>
         {aviso}
-        <h3>Garanta o seu número</h3>
+        <h3>Garanta seu número</h3>
         <div className="ticket-empty"><small>Ação de Natal · Gatil</small><strong>???</strong><span>Você escolhe depois do pagamento</span><i className="stamp">Natal 2026</i></div>
         <p>Cada número custa <b>{formatCurrencyBRL(TICKET_PRICE_BRL)}</b>. Pagou, escolheu: o número é seu na hora.</p>
         <form className="cart-form" onSubmit={(e) => { e.preventDefault(); submit() }}>
@@ -107,12 +107,12 @@ export function CheckoutAcao() {
             </div>
           )}
           {usaPix && (
-            <label className="email-field">E-mail para a confirmação
+            <label className="email-field">Seu e-mail para a confirmação
               <input type="email" inputMode="email" autoComplete="email" placeholder="voce@exemplo.com" value={email} onChange={(e) => setEmail(e.target.value)} />
             </label>
           )}
           <button type="submit" className="button cart-button" disabled={!podeEnviar || isSubmitting}>
-            {usaPix ? (isSubmitting ? "Gerando Pix…" : `Gerar Pix de ${valor}`) : (isSubmitting ? "Abrindo pagamento…" : `Pagar ${valor} no cartão`)}
+            {usaPix ? (isSubmitting ? "Gerando Pix…" : `Gerar Pix de ${valor}`) : (isSubmitting ? "Abrindo pagamento…" : "Pagar com cartão")}
           </button>
           {erro}
         </form>
