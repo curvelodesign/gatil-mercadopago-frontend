@@ -5,7 +5,9 @@ import { RaffleLayout } from "@/app/RaffleLayout";
 import { RootLayout } from "@/app/RootLayout";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 import { ChooseNumberPage, chooseNumberLoader } from "@/pages/ChooseNumberPage";
-import { RifaPage } from "@/pages/RifaPage";
+import { AcaoLayout } from "@/app/AcaoLayout";
+import { AcaoNatalPage } from "@/features/acao-natal/AcaoNatalPage";
+import { RegulamentoAcaoPage } from "@/features/acao-natal/RegulamentoAcaoPage";
 import { PagamentoPendentePage } from "@/pages/PagamentoPendentePage";
 import { PagamentoRecusadoPage } from "@/pages/PagamentoRecusadoPage";
 import { DoacaoRecusadaPage } from "@/pages/DoacaoRecusadaPage";
@@ -27,12 +29,18 @@ export const router = createBrowserRouter([
         children: [{ index: true, element: <HomePage /> }],
       },
       {
+        // Ação Solidária de Natal: landing da compra (Pix na tela ou cartão) e regulamento
+        element: <AcaoLayout />,
+        children: [
+          { path: "rifa", element: <AcaoNatalPage /> },
+          // Alias mantido pros links antigos já divulgados.
+          { path: "rifa/pagar", element: <AcaoNatalPage /> },
+          { path: "regulamento-acao", element: <RegulamentoAcaoPage /> },
+        ],
+      },
+      {
         element: <RaffleLayout />,
         children: [
-          // Landing da rifa: Pix na tela ou cartão pelo Mercado Pago
-          { path: "rifa", element: <RifaPage /> },
-          // Alias mantido pros links antigos já divulgados.
-          { path: "rifa/pagar", element: <RifaPage /> },
           { path: "rifa/pagamento-aprovado", element: <ChooseNumberPage />, loader: chooseNumberLoader },
           { path: "rifa/pagamento-pendente", element: <PagamentoPendentePage /> },
           { path: "rifa/pagamento-recusado", element: <PagamentoRecusadoPage /> },
