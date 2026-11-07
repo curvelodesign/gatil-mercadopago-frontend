@@ -20,6 +20,9 @@ export default defineConfig({
     baseURL: "http://localhost:5173",
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
+    // Opcional: usar um Chromium já instalado (PW_CHROMIUM_PATH) em vez do
+    // baixado pelo `npx playwright install`. Sem a variável, nada muda.
+    ...(process.env.PW_CHROMIUM_PATH ? { launchOptions: { executablePath: process.env.PW_CHROMIUM_PATH } } : {}),
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 });
