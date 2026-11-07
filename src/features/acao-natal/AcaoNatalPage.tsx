@@ -36,9 +36,9 @@ const faqMore: [string, React.ReactNode][] = [
 
 const gallery = [
   { caption: "Doação de ração", src: `${IMG}/galeria-hora-da-racao.webp`, alt: "Gato ao lado dos pacotes de ração do abrigo" },
-  { caption: "Vets", src: `${IMG}/galeria-vets.webp`, alt: "Teste veterinário sendo preparado para um gato do Gatil" },
+  { caption: "Teste FIV/FeLV", src: `${IMG}/galeria-vets.webp`, alt: "Teste veterinário sendo preparado para um gato do Gatil" },
   { caption: "Negresco ganhou um lar", src: `${IMG}/galeria-negresco.webp`, alt: "Gato Negresco descansando em seu novo lar" },
-  { caption: "Nossa equipe", src: `${IMG}/galeria-nossa-equipe.webp`, alt: "Integrante da equipe cuidando de um gato no abrigo" },
+  { caption: "Presidente da ONG", src: `${IMG}/galeria-nossa-equipe.webp`, alt: "Integrante da equipe cuidando de um gato no abrigo" },
   { caption: "Ala de filhotes", src: `${IMG}/galeria-ala-filhotes.webp`, alt: "Filhotes acolhidos na ala do abrigo" },
   { caption: "Ambiente do abrigo", src: `${IMG}/galeria-ambiente-abrigo.webp`, alt: "Gatos no ambiente interno do abrigo" },
 ]
@@ -365,7 +365,7 @@ export function AcaoNatalPage() {
           {testimonials.map((t) => (
             <article className="ig-card cane" key={t.user + t.tag}>
               <header><span className="avatar">{t.user.replace(/[^a-z]/gi, "").slice(0, 1).toUpperCase() || "?"}</span>
-                <a href={`https://instagram.com/${t.user}`} target="_blank" rel="noopener noreferrer">@{t.user}</a><Verified /><span className="from-ig"><IgIcon /></span></header>
+                <p>@{t.user}</p><Verified /><span className="from-ig"><IgIcon /></span></header>
               <b className="tag">{t.tag}</b><p>{t.text}</p>
             </article>
           ))}
@@ -375,7 +375,7 @@ export function AcaoNatalPage() {
         <ul className="seals">
           <li><b>CNPJ</b>25.382.038/0001-05</li><li><b>Desde 2016</b>com CNPJ ativo</li><li><b>10 anos</b>cuidando de gatos</li><li><b>Prestação de contas</b>aberta no Instagram</li>
         </ul>
-        <BuyButton>Escolher meu número e entrar pra essa turma</BuyButton>
+        <BuyButton>Escolher meu número e <br /> entrar pra essa turma</BuyButton>
       </section>
 
       {/* 3.7 FAQ */}
@@ -418,7 +418,7 @@ export function AcaoNatalPage() {
         <hr />
         <div className="footer-base">
           <small>Ação solidária do Gatil Irmã Francisca · CNPJ 25.382.038/0001-05 · Salvador, BA · Com CNPJ desde 2016 · Contato: <a href={`mailto:${ACAO.email}`}>{ACAO.email}</a></small>
-          <small>Desenvolvido por <a href="https://curvelo.art.br" target="_blank" rel="noreferrer">Curvelo</a>.</small>
+          <small>Desenvolvido por <a href="https://curvelo.art.br" target="_blank" rel="noreferrer">Curvelo</a> e <a href="https://www.linkedin.com/in/daniel-vasconcelos-7bb1a5274/" target="_blank" rel="noreferrer">daniel-vasconcelos</a>.</small>
         </div>
       </footer>
 

@@ -75,7 +75,9 @@ export function Rodape() {
             <a href="https://curvelo.art.br" target="_blank" rel="noopener">
               Curvelo
             </a>
-            .
+            {" "}e <a href="https://www.linkedin.com/in/daniel-vasconcelos-7bb1a5274/" target="_blank" rel="noreferrer">
+              Daniel Vasconcelos
+            </a>.
           </p>
         </div>
       </footer>
