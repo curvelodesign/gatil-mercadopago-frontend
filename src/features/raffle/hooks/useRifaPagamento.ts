@@ -17,7 +17,7 @@ const PAUSA_APROVADO_MS = 1800;
 // Mesmo critério do backend (validarEmailPix): domínio com ao menos 2 letras no final
 const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-const ERRO_ESGOTADO = "Os números desta rifa já foram todos vendidos. Obrigado pelo carinho com o Gatil!";
+const ERRO_ESGOTADO = "Os números desta ação já foram todos vendidos. Obrigado pelo carinho com o Gatil!";
 
 /** Valor do Pix de teste (o backend é quem decide; isso é só pra mostrar antes de gerar). */
 const VALOR_PIX_TESTE_BRL = 0.01;
