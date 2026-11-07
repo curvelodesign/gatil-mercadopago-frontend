@@ -16,6 +16,7 @@ const pad = (n: number) => String(n).padStart(3, "0");
 const lista = (texto: string) => texto.split(/, | e /).map(Number);
 
 const pedidos = new WeakMap<Page, Record<string, Record<string, unknown>[]>>();
+const cabecalhosReserva = new WeakMap<Page, Record<string, string>>();
 function registrar(page: Page, chave: string, corpo: Record<string, unknown>) {
   const mapa = pedidos.get(page) ?? {};
   (mapa[chave] ??= []).push(corpo);
@@ -48,6 +49,7 @@ Given("que a reserva dos números é aceita", async ({ page }) => {
   await page.route("**/api/rifa/reservar", async (route) => {
     const corpo = route.request().postDataJSON();
     registrar(page, "reservar", corpo);
+    cabecalhosReserva.set(page, route.request().headers());
     const agora = await agoraNoNavegador(page).catch(() => Date.now());
     return route.fulfill({
       status: 201,
@@ -298,4 +300,14 @@ Then("o deploy deve mandar os headers de segurança", async () => {
   expect(headers["X-Frame-Options"]).toBe("DENY");
   // O payment_id da URL não vaza para outros sites pelo Referer
   expect(headers["Referrer-Policy"]).toBe("strict-origin-when-cross-origin");
+});
+
+When("eu ligo o Pix de teste pelo console com a chave {string}", async ({ page }, chave: string) => {
+  expect(await page.evaluate(() => typeof window.gatilPixTeste)).toBe("function");
+  // O comando recarrega a página com o modo teste guardado na aba
+  await Promise.all([page.waitForEvent("load"), page.evaluate((c) => window.gatilPixTeste!(c), chave)]);
+});
+
+Then("a reserva deve ter sido pedida com o header de teste {string}", async ({ page }, chave: string) => {
+  await expect.poll(() => cabecalhosReserva.get(page)?.["x-pix-teste"]).toBe(chave);
 });
