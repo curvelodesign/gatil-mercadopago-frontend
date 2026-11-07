@@ -12,10 +12,10 @@ function tempoRestante(segundos: number) {
 /**
  * Card de compra da landing de Natal. Usa o pagamento real da rifa
  * (useRifaPagamento): Pix gerado e acompanhado aqui, ou cartão pelo
- * Mercado Pago. Um número por pagamento; aprovado, a pessoa vai pra
- * /rifa/pagamento-aprovado escolher o número.
+ * Mercado Pago. Um bilhete por pagamento; aprovado, a pessoa vai pra
+ * /rifa/pagamento-aprovado escolher o bilhete.
  *
- * Fase 2: quando o backend tiver reserva de vários números, este card
+ * Fase 2: quando o backend tiver reserva de vários bilhetes, este card
  * volta a ser o checkout de "escolhe primeiro, paga depois".
  */
 export function CheckoutAcao() {
@@ -58,7 +58,7 @@ export function CheckoutAcao() {
     conteudo = (
       <>
         <h3>Pagamento confirmado! 🎄</h3>
-        <p role="status">Seu Pix de {valor} chegou. Levando você pra escolher o seu número da sorte…</p>
+        <p role="status">Seu Pix de {valor} chegou. Levando você pra escolher o seu bilhete da sorte…</p>
         <div className="progress" aria-hidden="true"><span style={{ width: "100%" }} /></div>
       </>
     )
@@ -83,7 +83,7 @@ export function CheckoutAcao() {
         <img className="qr-img" src={qrSrc} alt="QR code do Pix" width={188} height={188} />
         <button className={`copy-button ${copiado ? "copied" : ""}`} onClick={copiarCodigo}>{copiado ? "Código copiado ✓" : "Copiar código Pix"}</button>
         <code className="pix-code" ref={codigoPix} tabIndex={0}>{pix.qrCode}</code>
-        <p>Abra o app do banco e pague <b>{valor}</b>. Assim que o Pix cair, a gente te leva pra escolher o seu número.</p>
+        <p>Abra o app do banco e pague <b>{valor}</b>. Assim que o Pix cair, a gente te leva pra escolher o seu bilhete.</p>
         <div className="pix-status" role="status">
           <span><i aria-hidden="true" />Aguardando seu pagamento</span>
           {segundosRestantes !== null && <b>expira em {tempoRestante(segundosRestantes)}</b>}
@@ -96,9 +96,9 @@ export function CheckoutAcao() {
     conteudo = (
       <>
         {aviso}
-        <h3>Garanta seu número</h3>
+        <h3>Garanta seu bilhete</h3>
         <div className="ticket-empty"><small>Ação de Natal · Gatil</small><strong>???</strong><span>Você escolhe depois do pagamento</span><i className="stamp">Natal 2026</i></div>
-        <p>Cada número custa <b>{formatCurrencyBRL(TICKET_PRICE_BRL)}</b>. Pagou, escolheu: o número é seu na hora.</p>
+        <p>Cada bilhete custa <b>{formatCurrencyBRL(TICKET_PRICE_BRL)}</b>. Pagou, escolheu: o bilhete é seu na hora.</p>
         <form className="cart-form" onSubmit={(e) => { e.preventDefault(); submit() }}>
           {pixAtivo && (
             <div className="payment-options" role="radiogroup" aria-label="Forma de pagamento">
@@ -117,7 +117,7 @@ export function CheckoutAcao() {
           {erro}
         </form>
         <small className="micro">
-          {usaPix ? "O Pix é gerado pelo Mercado Pago para o Gatil Irmã Francisca (CNPJ 25.382.038/0001-05)." : "Você vai para o ambiente seguro do Mercado Pago e volta pra escolher o seu número."}
+          {usaPix ? "O Pix é gerado pelo Mercado Pago para o Gatil Irmã Francisca (CNPJ 25.382.038/0001-05)." : "Você vai para o ambiente seguro do Mercado Pago e volta pra escolher o seu bilhete."}
         </small>
       </>
     )
@@ -134,7 +134,7 @@ export function CheckoutAcao() {
         {conteudo}
         <div className="acerola-tip">
           <img src={`${A}/acerola.png`} alt="" />
-          <div><small>Acerola, gata do Gatil</small><p>Depois do pagamento, dá uma olhada nas últimas abas. Os números grandes também dão sorte, viu?</p></div>
+          <div><small>Acerola, gata do Gatil</small><p>Depois do pagamento, dá uma olhada nas últimas abas. Os bilhetes grandes também dão sorte, viu?</p></div>
         </div>
       </div>
     </aside>
