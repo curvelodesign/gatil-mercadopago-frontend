@@ -37,3 +37,12 @@ Funcionalidade: Página de escolha do número (frontend)
     Quando o backend responde 409 ao tentar confirmar
     Então devo ver a mensagem "Esse número acabou de ser escolhido por outra pessoa"
     E os campos nome, WhatsApp e e-mail não devem ser apagados
+
+  Cenário: Quem já escolheu vê o número e reenvia o e-mail com o token de reenvio
+    Dado que "/mercadopago/verificar-pagamento" diz que o número 42 já foi escolhido
+    E que o reenvio do e-mail é aceito
+    Quando eu acesso "/rifa/pagamento-aprovado?payment_id=999033"
+    Então devo ver o título "Você já escolheu seu número"
+    Quando eu clico em "Não recebi o e-mail — reenviar"
+    Então devo ver a mensagem "E-mail reenviado!"
+    E o reenvio deve ter usado o token de reenvio

@@ -28,6 +28,9 @@ interface LoaderData {
   // Preenchido quando esse pagamento já tinha escolhido um número
   // antes (ex: a pessoa recarregou a página) — não é um erro.
   alreadyClaimedNumber: number | null;
+  // Token que só serve pra reenviar o e-mail desse número (o backend
+  // devolve junto do 409 "já escolheu").
+  tokenReenvio: string | null;
 }
 
 export async function chooseNumberLoader({ request }: LoaderFunctionArgs): Promise<LoaderData> {
@@ -37,13 +40,24 @@ export async function chooseNumberLoader({ request }: LoaderFunctionArgs): Promi
 
   try {
     const { token } = await verificarPagamento(paymentId);
-    return { token, alreadyClaimedNumber: null };
+    return { token, alreadyClaimedNumber: null, tokenReenvio: null };
   } catch (err) {
     if (err instanceof ApiRequestError && err.status === 409) {
-      const claimedNumber = (err.data as { claimedNumber?: number } | undefined)?.claimedNumber;
+      const dados = err.data as { claimedNumber?: number; tokenReenvio?: string; pedidoId?: string } | undefined;
+      // Pagamento de uma compra com reserva: os números já foram escolhidos.
+      if (typeof dados?.pedidoId === "string") {
+        throw redirect(
+          `/rifa/compra/aprovada?payment_id=${encodeURIComponent(paymentId)}&external_reference=${encodeURIComponent(dados.pedidoId)}`
+        );
+      }
+      const claimedNumber = dados?.claimedNumber;
       if (typeof claimedNumber === "number") {
         // Já escolheu antes — não é uma falha, é um estado válido.
-        return { token: null, alreadyClaimedNumber: claimedNumber };
+        return {
+          token: null,
+          alreadyClaimedNumber: claimedNumber,
+          tokenReenvio: typeof dados?.tokenReenvio === "string" ? dados.tokenReenvio : null,
+        };
       }
     }
     // Qualquer outro erro (pagamento não aprovado, etc.) é recusa de verdade.
@@ -53,21 +67,24 @@ export async function chooseNumberLoader({ request }: LoaderFunctionArgs): Promi
 
 function AlreadyClaimedScreen({
   claimedNumber,
-  paymentId,
+  tokenReenvio,
 }: {
   claimedNumber: number;
-  paymentId: string | null;
+  tokenReenvio: string | null;
 }) {
   const [isResending, setIsResending] = useState(false);
   const [resendMessage, setResendMessage] = useState<string | null>(null);
 
   async function handleReenviar() {
-    if (!paymentId) return;
+    if (!tokenReenvio) return;
     setIsResending(true);
     setResendMessage(null);
 
     try {
-      await apiClient.post("/rifa/reenviar-email", { paymentId });
+      // O backend identifica o pagamento pelo token, nunca pelo corpo.
+      await apiClient.post("/rifa/reenviar-email", undefined, {
+        headers: { Authorization: `Bearer ${tokenReenvio}` },
+      });
       setResendMessage("E-mail reenviado! Confere sua caixa de entrada (e o spam).");
     } catch {
       setResendMessage("Não conseguimos reenviar agora. Tenta de novo em instantes.");
@@ -96,7 +113,7 @@ function AlreadyClaimedScreen({
       <button
         type="button"
         onClick={handleReenviar}
-        disabled={isResending || !paymentId}
+        disabled={isResending || !tokenReenvio}
         className="mb-6 text-xs font-bold text-verde underline disabled:opacity-50"
       >
         {isResending ? "Reenviando..." : "Não recebi o e-mail — reenviar"}
@@ -115,7 +132,7 @@ function AlreadyClaimedScreen({
 }
 
 export function ChooseNumberPage() {
-  const { token, alreadyClaimedNumber } = useLoaderData() as LoaderData;
+  const { token, alreadyClaimedNumber, tokenReenvio } = useLoaderData() as LoaderData;
   const { paymentId } = useOrderParams();
   const { takenNumbers, isLoading, error } = useAvailableNumbers();
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
@@ -133,7 +150,7 @@ export function ChooseNumberPage() {
 
   if (alreadyClaimedNumber !== null) {
     return (
-      <AlreadyClaimedScreen claimedNumber={alreadyClaimedNumber} paymentId={paymentId} />
+      <AlreadyClaimedScreen claimedNumber={alreadyClaimedNumber} tokenReenvio={tokenReenvio} />
     );
   }
 

@@ -200,3 +200,37 @@ Then("os campos nome, WhatsApp e e-mail não devem ser apagados", async ({ page 
   await expect(page.getByLabel("WhatsApp")).not.toHaveValue("");
   await expect(page.getByLabel("E-mail")).not.toHaveValue("");
 });
+// ---------- já escolheu: reenvio do e-mail ----------
+
+const reenvios = new WeakMap<object, { authorization?: string; body: string | null }[]>();
+
+Given(
+  "que {string} diz que o número {int} já foi escolhido",
+  async ({ page }, endpoint: string, numero: number) => {
+    await page.route(`**${endpoint}**`, (route) =>
+      route.fulfill({
+        status: 409,
+        json: { message: "Este pagamento já escolheu um número.", claimedNumber: numero, tokenReenvio: "token-reenvio-teste" },
+      })
+    );
+  }
+);
+
+Given("que o reenvio do e-mail é aceito", async ({ page }) => {
+  reenvios.set(page, []);
+  await page.route("**/api/rifa/reenviar-email**", (route) => {
+    reenvios.get(page)!.push({
+      authorization: route.request().headers()["authorization"],
+      body: route.request().postData(),
+    });
+    return route.fulfill({ json: { message: "E-mail reenviado." } });
+  });
+});
+
+Then("o reenvio deve ter usado o token de reenvio", async ({ page }) => {
+  const chamadas = reenvios.get(page) ?? [];
+  expect(chamadas).toHaveLength(1);
+  expect(chamadas[0].authorization).toBe("Bearer token-reenvio-teste");
+  // O pagamento sai do token: o corpo não carrega paymentId
+  expect(chamadas[0].body ?? "").not.toContain("paymentId");
+});

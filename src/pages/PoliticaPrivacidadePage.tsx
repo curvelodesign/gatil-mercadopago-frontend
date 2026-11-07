@@ -18,7 +18,7 @@ export function PoliticaPrivacidadePage() {
       <main className="documento">
         <div className="container">
           <h1>Política de&nbsp;Privacidade</h1>
-          <p className="documento__data">Última atualização: 5&nbsp;de&nbsp;outubro de&nbsp;2026</p>
+          <p className="documento__data">Última atualização: 7&nbsp;de&nbsp;novembro de&nbsp;2026</p>
 
           <h2>1. Sobre&nbsp;o&nbsp;Gatil</h2>
           <p>
@@ -40,6 +40,14 @@ export function PoliticaPrivacidadePage() {
               de&nbsp;que&nbsp;a&nbsp;doação&nbsp;ocorreu.
             </li>
             <li>
+              <strong>Ao&nbsp;participar da&nbsp;Ação Solidária de&nbsp;Natal:</strong> nome,{" "}
+              <span className="nowrap">e-mail</span> e&nbsp;WhatsApp, para&nbsp;confirmar a&nbsp;compra,
+              enviar os&nbsp;números e&nbsp;falar com&nbsp;quem for&nbsp;sorteado. Enquanto os&nbsp;números ficam
+              reservados, guardamos também um&nbsp;código derivado do&nbsp;endereço&nbsp;IP (nunca o&nbsp;IP em&nbsp;si),
+              só&nbsp;para&nbsp;limitar reservas automáticas. Se&nbsp;a&nbsp;compra não&nbsp;for&nbsp;paga, esses
+              dados são&nbsp;apagados em&nbsp;até&nbsp;7&nbsp;dias.
+            </li>
+            <li>
               <strong>Ao&nbsp;navegar no&nbsp;site:</strong> páginas visitadas, tempo de&nbsp;permanência, dispositivo
               e&nbsp;origem do&nbsp;acesso, coletados via&nbsp;Google Analytics e&nbsp;Meta&nbsp;Pixel.
             </li>
@@ -54,7 +62,11 @@ export function PoliticaPrivacidadePage() {
           <h2>3. Com&nbsp;quem&nbsp;compartilhamos os&nbsp;dados</h2>
           <ul>
             <li>
-              <strong>Mercado Pago</strong>&nbsp;- processamento do&nbsp;pagamento da&nbsp;doação.
+              <strong>Mercado Pago</strong>&nbsp;- processamento do&nbsp;pagamento da&nbsp;doação e&nbsp;da&nbsp;Ação&nbsp;de&nbsp;Natal.
+            </li>
+            <li>
+              <strong>Cloudflare (Turnstile)</strong>&nbsp;- verificação anti-robô na&nbsp;reserva de&nbsp;números
+              da&nbsp;Ação de&nbsp;Natal.
             </li>
             <li>
               <strong>Meta (Instagram/Facebook)</strong>&nbsp;- via&nbsp;Pixel, para&nbsp;medir a&nbsp;eficácia

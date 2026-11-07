@@ -9,8 +9,21 @@ if (!rootElement) {
   throw new Error("Elemento #root não encontrado em index.html");
 }
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
-);
+function renderizar() {
+  createRoot(rootElement!).render(
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  );
+}
+
+// Backend falso (npm run dev:mock). import.meta.env.DEV é false no build:
+// o mock nem entra no bundle de produção.
+if (import.meta.env.DEV && import.meta.env.VITE_API_MOCK === "true") {
+  import("@/mocks/mockApi").then(({ instalarMockApi }) => {
+    instalarMockApi();
+    renderizar();
+  });
+} else {
+  renderizar();
+}
