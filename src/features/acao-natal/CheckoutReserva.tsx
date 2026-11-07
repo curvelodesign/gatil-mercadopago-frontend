@@ -143,13 +143,13 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
     expirou.current = true
     guardarReserva(null)
     setReserva(null); setPix(null); setEtapa("escolhendo"); onClear()
-    setAviso(`Os ${ACAO.minutosReserva} minutos passaram e seus números voltaram pro quadro. Se ninguém pegou, ainda dá tempo.`)
+    setAviso(`Os ${ACAO.minutosReserva} minutos passaram e seus bilhetes voltaram pro quadro. Se ninguém pegou, ainda dá tempo.`)
   }, [segundosReserva, etapa, onClear])
 
   useEffect(() => {
     if (pix && etapaPix === "expirado") {
       guardarReserva(null)
-      setAviso("Esse Pix expirou e nenhum valor foi cobrado. Seus números voltaram pro quadro: toque em Continuar pra guardar de novo.")
+      setAviso("Esse Pix expirou e nenhum valor foi cobrado. Seus bilhetes voltaram pro quadro: toque em Continuar pra guardar de novo.")
     }
   }, [pix, etapaPix])
 
@@ -178,9 +178,9 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
         onTaken(indisponiveis)
         setAviso(indisponiveis.length === 1
           ? `O ${pad(indisponiveis[0])} acabou de ganhar dono. Escolhe outro?`
-          : "Esses números acabaram de ganhar dono. Escolhe outros?")
+          : "Esses bilhetes acabaram de ganhar dono. Escolhe outros?")
       } else {
-        setAviso(mensagemDoErro(err, "Não conseguimos guardar seus números agora. Tenta de novo em instantes."))
+        setAviso(mensagemDoErro(err, "Não conseguimos guardar seus bilhetes agora. Tenta de novo em instantes."))
       }
     } finally {
       setOcupado(false)
@@ -213,7 +213,7 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
       }
     } catch (err) {
       if (err instanceof ApiRequestError && err.status === 410) {
-        voltarAoQuadro("Sua reserva venceu e os números voltaram pro quadro. Se ninguém pegou, é só tocar em Continuar de novo.")
+        voltarAoQuadro("Sua reserva venceu e os bilhetes voltaram pro quadro. Se ninguém pegou, é só tocar em Continuar de novo.")
       } else if (err instanceof ApiRequestError && err.status === 409 && (err.data as { status?: string } | undefined)?.status?.startsWith("PAGO")) {
         buscarReserva(reserva.reservaId).then(concluir).catch(() => undefined)
       } else if (err instanceof ApiRequestError && err.status === 400 && err.message) {
@@ -246,7 +246,7 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
         <span className="label">Passo {passo} de 3</span>
 
         {reserva?.teste && etapa !== "pronto" && (
-          <div className="cart-warning" role="note"><p>🧪 Modo teste: Pix de R$ 0,01 e números de teste. Pra sair, rode gatilPixTeste(null) no console.</p></div>
+          <div className="cart-warning" role="note"><p>🧪 Modo teste: Pix de R$ 0,01 e bilhetes de teste. Pra sair, rode gatilPixTeste(null) no console.</p></div>
         )}
 
         {aviso && (
@@ -258,33 +258,33 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
 
         {etapa === "escolhendo" && (selected.length ? (
           <>
-            <h3>{selected.length === 1 ? <>Você tirou o <strong>{pad(selected[0])}</strong></> : <>Você tirou <strong>{selected.length}</strong> números</>}</h3>
+            <h3>{selected.length === 1 ? <>Você tirou o <strong>{pad(selected[0])}</strong></> : <>Você tirou <strong>{selected.length}</strong> bilhetes</>}</h3>
             <div className="tickets">
               {selected.map((n) => <button type="button" key={n} onClick={() => onRemove(n)} aria-label={`Tirar o ${pad(n)}`}>{pad(n)}<span>×</span></button>)}
             </div>
-            <h4>{selected.length} {selected.length === 1 ? "número" : "números"} × R$ 100 = <b>{brl(selected.length * 100)}</b></h4>
+            <h4>{selected.length} {selected.length === 1 ? "bilhete" : "bilhetes"} × R$ 100 = <b>{brl(selected.length * 100)}</b></h4>
             {selected.length < ACAO.maxNumeros
-              ? <div className="shortcuts"><button onClick={() => onRandom(1)}>+1 número aleatório</button><button onClick={() => onRandom(3)}>+3 aleatórios</button></div>
-              : <p className="micro">Dá pra levar até {ACAO.maxNumeros} números por compra. Quer mais? Faça outra compra depois.</p>}
+              ? <div className="shortcuts"><button onClick={() => onRandom(1)}>+1 bilhete aleatório</button><button onClick={() => onRandom(3)}>+3 aleatórios</button></div>
+              : <p className="micro">Dá pra levar até {ACAO.maxNumeros} bilhetes por compra. Quer mais? Faça outra compra depois.</p>}
             <p>{selected.length === 1 ? "Toque em Continuar e ele fica guardado pra você" : "Toque em Continuar e eles ficam guardados pra você"} por {ACAO.minutosReserva} minutos enquanto paga.</p>
             <Turnstile onToken={setTurnstileToken} versao={turnstileVersao} />
-            <button className="button cart-button" disabled={ocupado || (turnstileAtivo && !turnstileToken)} onClick={continuar}>{ocupado ? "Guardando seus números…" : "Continuar"}</button>
+            <button className="button cart-button" disabled={ocupado || (turnstileAtivo && !turnstileToken)} onClick={continuar}>{ocupado ? "Guardando seus bilhetes…" : "Continuar"}</button>
           </>
         ) : (
           <>
-            <h3>Ainda sem número</h3>
+            <h3>Ainda sem bilhete</h3>
             <div className="ticket-empty"><small>Ação de Natal · Gatil</small><strong>???</strong><span>Revelação 25/12</span><i className="stamp">Natal 2026</i></div>
-            <p>Toque em um número livre. Ele aparece aqui.</p>
-            <div className="shortcuts"><button onClick={() => onRandom(1)}>+1 número aleatório</button><button onClick={() => onRandom(3)}>+3 aleatórios</button></div>
+            <p>Toque em um bilhete livre. Ele aparece aqui.</p>
+            <div className="shortcuts"><button onClick={() => onRandom(1)}>+1 bilhete aleatório</button><button onClick={() => onRandom(3)}>+3 aleatórios</button></div>
           </>
         ))}
 
         {etapa === "pagando" && reserva && (
           <>
             <h3>Como você quer pagar?</h3>
-            <div className="reservation"><span><small>{um ? "Seu número" : "Seus números"}</small><b>{numeros.map(pad).join(" · ")}</b></span>
+            <div className="reservation"><span><small>{um ? "Seu bilhete" : "Seus bilhetes"}</small><b>{numeros.map(pad).join(" · ")}</b></span>
               <span className="timer">{um ? "Guardado" : "Guardados"} por mais <b>{tempo(segundosReserva)}</b></span>
-              <button onClick={trocarNumeros}>{um ? "Trocar número" : "Trocar números"}</button></div>
+              <button onClick={trocarNumeros}>{um ? "Trocar bilhete" : "Trocar bilhetes"}</button></div>
             <div className="payment-options" role="radiogroup" aria-label="Forma de pagamento">
               <button type="button" role="radio" aria-checked={payment === "pix"} className={payment === "pix" ? "active" : ""} onClick={() => setPayment("pix")}><b>Pix</b><span>na hora, aqui mesmo</span></button>
               {!reserva.teste && <button type="button" role="radio" aria-checked={payment === "card"} className={payment === "card" ? "active" : ""} onClick={() => setPayment("card")}><b>Cartão</b><span>em até 2x · Mercado Pago</span></button>}
@@ -298,7 +298,7 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
                 <input type="checkbox" checked={contato.aceiteTermos} onChange={campo("aceiteTermos")} />
                 <span>Li e aceito o <Link to={ACAO.links.regulamento} target="_blank">Regulamento</Link> e a <Link to={ACAO.links.privacidade} target="_blank">Política de Privacidade</Link>.</span>
               </label>
-              <small className="micro">Usamos seus dados só para confirmar a compra e falar com você se o seu número for sorteado. Nada de lista de e-mails.</small>
+              <small className="micro">Usamos seus dados só para confirmar a compra e falar com você se o seu bilhete for sorteado. Nada de lista de e-mails.</small>
             </fieldset>
             <button className="button cart-button" disabled={ocupado} onClick={pagar}>
               {ocupado ? (payment === "pix" ? "Gerando Pix…" : "Abrindo pagamento…") : payment === "pix" ? `Gerar Pix de ${brl(reserva.teste ? 0.01 : total)}` : `Pagar ${brl(total)} no cartão`}
@@ -322,7 +322,7 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
             <h3>Escaneie e pronto</h3>
             <img className="qr-img" src={pix.qrCodeBase64.startsWith("data:") ? pix.qrCodeBase64 : `data:image/png;base64,${pix.qrCodeBase64}`} alt="QR code do Pix" width={188} height={188} />
             <button className={`copy-button ${copiado ? "copied" : ""}`} onClick={() => copiar(pix.qrCode, "pix")}>{copiado ? "Código copiado ✓" : "Copiar código Pix"}</button>
-            <p>Abra o app do banco e pague <b>{brl(valorPix)}</b>. {um ? <>O <b>{pad(numeros[0])}</b> continua guardado</> : <>Seus <b>{numeros.length}</b> números continuam guardados</>} até o Pix expirar.</p>
+            <p>Abra o app do banco e pague <b>{brl(valorPix)}</b>. {um ? <>O <b>{pad(numeros[0])}</b> continua guardado</> : <>Seus <b>{numeros.length}</b> bilhetes continuam guardados</>} até o Pix expirar.</p>
             {segundosRestantes !== null && <b className="pix-time">O Pix expira em {tempo(segundosRestantes)}</b>}
             <div className="pix-status" role="status"><span><i aria-hidden="true" />Aguardando seu pagamento</span></div>
           </>
@@ -330,16 +330,16 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
 
         {etapa === "pronto" && compra && (
           <>
-            <h3>{compra.numerosConfirmados.length === 1 ? <>Tirou! O <strong>{pad(compra.numerosConfirmados[0])}</strong> é seu 🎄</> : <>Tirou! Os <strong>{compra.numerosConfirmados.length}</strong> números são seus 🎄</>}</h3>
+            <h3>{compra.numerosConfirmados.length === 1 ? <>Tirou! O <strong>{pad(compra.numerosConfirmados[0])}</strong> é seu 🎄</> : <>Tirou! Os <strong>{compra.numerosConfirmados.length}</strong> bilhetes são seus 🎄</>}</h3>
             <div className="final-tickets">{compra.numerosConfirmados.map((n) => <div className="final-ticket" key={n}><span>Ação de Natal · Gatil</span><strong>{pad(n)}</strong><small>Revelação 25/12</small></div>)}</div>
             {compra.numerosAEscolher > 0 && (
               <div className="cart-warning" role="status">
-                <p>{compra.numerosAEscolher === 1 ? "Um número" : `${compra.numerosAEscolher} números`} que você reservou {compra.numerosAEscolher === 1 ? "foi tirado" : "foram tirados"} por outra pessoa antes do pagamento ser confirmado. Escolha {compra.numerosAEscolher === 1 ? "outro" : "outros"}:</p>
-                {compra.linksEscolha.map((link, i) => <p key={link}><Link to={link}>Escolher o {i + 1}º número</Link></p>)}
+                <p>{compra.numerosAEscolher === 1 ? "Um bilhete" : `${compra.numerosAEscolher} bilhetes`} que você reservou {compra.numerosAEscolher === 1 ? "foi tirado" : "foram tirados"} por outra pessoa antes do pagamento ser confirmado. Escolha {compra.numerosAEscolher === 1 ? "outro" : "outros"}:</p>
+                {compra.linksEscolha.map((link, i) => <p key={link}><Link to={link}>Escolher o {i + 1}º bilhete</Link></p>)}
               </div>
             )}
             <p>A confirmação foi enviada para o seu e-mail.</p>
-            <button className={`button cart-button ${compartilhado ? "success" : ""}`} onClick={() => copiar(`Tirei 300 gatos no amigo secreto 🎄 Entrei na ação solidária de Natal do Gatil Irmã Francisca: cada número de R$ 100 ajuda a cuidar dos gatos, e o sorteio é dia 25/12. ${location.origin}/rifa`, "share")}>
+            <button className={`button cart-button ${compartilhado ? "success" : ""}`} onClick={() => copiar(`Tirei 300 gatos no amigo secreto 🎄 Entrei na ação solidária de Natal do Gatil Irmã Francisca: cada bilhete de R$ 100 ajuda a cuidar dos gatos, e o sorteio é dia 25/12. ${location.origin}/rifa`, "share")}>
               {compartilhado ? "Mensagem copiada ✓" : "Chamar mais gente"}
             </button>
           </>
@@ -347,7 +347,7 @@ export function CheckoutReserva({ selected, onRemove, onRandom, onTaken, onCompl
 
         <div className="acerola-tip">
           <img src={`${A}/acerola.png`} alt="" />
-          <div><small>Acerola, gata do Gatil</small><p>Dá uma olhada nas últimas abas. Os números grandes também dão sorte, viu?</p></div>
+          <div><small>Acerola, gata do Gatil</small><p>Dá uma olhada nas últimas abas. Os bilhetes grandes também dão sorte, viu?</p></div>
         </div>
       </div>
     </aside>

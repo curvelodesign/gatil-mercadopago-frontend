@@ -21,18 +21,18 @@ const testimonials = [
 ]
 
 const faqTop: [string, React.ReactNode][] = [
-  ["Como o número é sorteado?", <>O número ganhador é sorteado pela plataforma sorteios.org. A revelação é ao vivo no Instagram do Gatil em 25/12, às 20h.</>],
+  ["Como o bilhete é sorteado?", <>O bilhete ganhador é sorteado pela plataforma sorteios.org. A revelação é ao vivo no Instagram do Gatil em 25/12, às 20h.</>],
   ["Pra onde vai o dinheiro?", <>Meta: R$ 50.000. Prestação de contas no Instagram após o sorteio.</>],
-  ["E se nem todos os números forem vendidos?", <>O sorteio acontece em 25/12 do mesmo jeito, entre todos os 500 números. Os números que não forem vendidos pertencem ao Gatil: se um deles for sorteado, o valor do prêmio fica com o abrigo e vai para a causa.</>],
+  ["E se nem todos os bilhetes forem vendidos?", <>O sorteio acontece em 25/12 do mesmo jeito, entre todos os 500 bilhetes. Os bilhetes que não forem vendidos pertencem ao Gatil: se um deles for sorteado, o valor do prêmio fica com o abrigo e vai para a causa.</>],
   ["Ganhei! E agora?", <>Depois da revelação, a gente entra em contato com o ganhador pelo telefone ou e-mail informado na compra. O prêmio é pago via Pix até 26/12, a partir do momento em que conseguimos falar com você.</>],
   ["Dá pra ajudar sem concorrer?", <>Sim! Doe qualquer valor na nossa <Link to={ACAO.links.doacao}>página de doação</Link>.</>],
 ]
 const faqMore: [string, React.ReactNode][] = [
-  ["Posso comprar mais de um número?", ACAO.fluxoCompleto ? <>Pode, e na mesma compra: toque em até {ACAO.maxNumeros} números no quadro antes de pagar. Quer mais? É só fazer outra compra. Cada número custa R$ 100, e cada um é uma chance a mais na revelação.</> : <>Pode. Cada pagamento vale um número: depois de escolher o primeiro, é só voltar aqui e fazer outra compra. Cada número custa R$ 100, e cada um é uma chance a mais na revelação.</>],
-  ["Posso dar um número de presente?", <>Pode. Compre com o seu e-mail e passe o número pra quem você quiser. Se ele for sorteado, o prêmio é pago a quem fez a compra, e vocês se acertam.</>],
-  ["Paguei e ainda não escolhi meu número. O que eu faço?", <>Procure o e-mail que enviamos no dia da compra: ele traz o link para escolher. Você tem até 20 dias a partir da compra; se não escolher nesse prazo, o sistema sorteia um número livre para você e avisa por e-mail. Os lembretes chegam no dia da compra e 5, 10, 15 e 20 dias depois.</>],
-  ["Preciso comprar número pra adotar um gato?", <>Não. A ação serve só para arrecadar dinheiro e não tem nenhuma ligação com adoção. Se você quer adotar, entre no nosso <a href={ACAO.links.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>, veja os gatos no destaque “Disponíveis” e clique no link da bio para preencher o formulário de adoção.</>],
-  ["Ainda dá pra comprar?", <>Dá, sim. Enquanto tiver número livre no quadro, as vendas continuam abertas, até 24/12, às 23h59.</>],
+  ["Posso comprar mais de um bilhete?", ACAO.fluxoCompleto ? <>Pode, e na mesma compra: toque em até {ACAO.maxNumeros} bilhetes no quadro antes de pagar. Quer mais? É só fazer outra compra. Cada bilhete custa R$ 100, e cada um é uma chance a mais na revelação.</> : <>Pode. Cada pagamento vale um bilhete: depois de escolher o primeiro, é só voltar aqui e fazer outra compra. Cada bilhete custa R$ 100, e cada um é uma chance a mais na revelação.</>],
+  ["Posso dar um bilhete de presente?", <>Pode. Compre com o seu e-mail e passe o bilhete pra quem você quiser. Se ele for sorteado, o prêmio é pago a quem fez a compra, e vocês se acertam.</>],
+  ["Paguei e ainda não escolhi meu bilhete. O que eu faço?", <>Procure o e-mail que enviamos no dia da compra: ele traz o link para escolher. Você tem até 20 dias a partir da compra; se não escolher nesse prazo, o sistema sorteia um bilhete livre para você e avisa por e-mail. Os lembretes chegam no dia da compra e 5, 10, 15 e 20 dias depois.</>],
+  ["Preciso comprar bilhete pra adotar um gato?", <>Não. A ação serve só para arrecadar dinheiro e não tem nenhuma ligação com adoção. Se você quer adotar, entre no nosso <a href={ACAO.links.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>, veja os gatos no destaque “Disponíveis” e clique no link da bio para preencher o formulário de adoção.</>],
+  ["Ainda dá pra comprar?", <>Dá, sim. Enquanto tiver bilhete livre no quadro, as vendas continuam abertas, até 24/12, às 23h59.</>],
 ]
 
 const gallery = [
@@ -145,7 +145,7 @@ export function AcaoNatalPage() {
   const heroScrollTimerRef = useRef<number | undefined>(undefined)
   const galleryRef = useRef<HTMLDivElement>(null)
   const cd = countdown()
-  // Fluxo completo: números escolhidos no quadro e comprados nesta visita
+  // Fluxo completo: bilhetes escolhidos no quadro e comprados nesta visita
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [purchased, setPurchased] = useState<Set<number>>(new Set())
   const sold = useMemo(() => new Set([...takenNumbers, ...purchased]), [takenNumbers, purchased])
@@ -186,7 +186,7 @@ export function AcaoNatalPage() {
   }, [slide])
   useEffect(() => semViuvas(".acao"), [])
 
-  const BuyButton = ({ wide = false, children = <>Escolher meu número · R$ 100</> }: { wide?: boolean; children?: React.ReactNode }) => (
+  const BuyButton = ({ wide = false, children = <>Escolher meu bilhete · R$ 100</> }: { wide?: boolean; children?: React.ReactNode }) => (
     <button className={`button bowed ${wide ? "wide" : ""}`} onClick={() => goTo("participar")}>{children}<Bow /></button>
   )
 
@@ -199,7 +199,7 @@ export function AcaoNatalPage() {
         <nav>
           <button type="button" className="header-link" onClick={() => goTo("escolher-numero")}>Como funciona <span aria-hidden="true">→</span></button>
           <a className="ig" href={ACAO.links.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram do Gatil"><IgIcon /></a>
-          <button className="button small" onClick={() => goTo("participar")}><span className="desk">Escolher meu número</span><span className="mob">Participar</span></button>
+          <button className="button small" onClick={() => goTo("participar")}><span className="desk">Escolher meu bilhete</span><span className="mob">Participar</span></button>
         </nav>
       </header>
 
@@ -214,8 +214,8 @@ export function AcaoNatalPage() {
           <div className="hero-copy">
             <div className="pills"><span>Ação Solidária de Natal</span><span>10 anos de Gatil</span></div>
             <h1>Neste Natal, você tirou 300 gatos no amigo secreto.</h1>
-            <p className="offer">R$ 100 por número. <strong>R$ 10 mil</strong> para quem for revelado na noite de Natal.</p>
-            <p className="support">Só 500 números · Cada um ajuda a quitar a dívida que manteve 300 gatos alimentados.</p>
+            <p className="offer">R$ 100 por bilhete. <strong>R$ 10 mil</strong> para quem for revelado na noite de Natal.</p>
+            <p className="support">Só 500 bilhetes · Cada um ajuda a quitar a dívida que manteve 300 gatos alimentados.</p>
             <div className="counter">
               <div className="xmas-ball"><i className="cap" /><i className="holly" /><i className="shine" />
                 <b>{cd.today ? "🎄" : cd.days}</b>{!cd.today && <span>{cd.days === 1 ? "DIA" : "DIAS"}</span>}
@@ -224,7 +224,7 @@ export function AcaoNatalPage() {
                 <h2>{cd.today ? "A revelação é hoje!" : "pra revelação"}</h2>
                 <p>Sorteio em 25/12, às {ACAO.horario}, ao vivo no Instagram do Gatil</p>
                 <div className="progress"><span style={{ width: `${(sold.size / ACAO.totalNumeros) * 100}%` }} /></div>
-                <small><b>{sold.size}</b> números já têm dono · faltam <b>{free}</b> números</small>
+                <small><b>{sold.size}</b> bilhetes já têm dono · faltam <b>{free}</b> bilhetes</small>
               </div>
             </div>
             <p className="deadline">Vendas até {ACAO.prazo}</p>
@@ -282,26 +282,26 @@ export function AcaoNatalPage() {
       <section className="section raffle" id="escolher-numero">
         <Flake className="f1 red" /><Flake className="f2 green" />
         <span className="label">Sua participação</span>
-        <h2>Hora de tirar o seu número</h2>
+        <h2>Hora de tirar o seu bilhete</h2>
         <div className="raffle-intro">
           <ol className="steps">
-            <li><Ornament n={1} color="#ff9d3b" /><p>{completo ? "Escolha um ou mais números. Sem ideia? O 🎲 escolhe por você." : "Pague R$ 100 no Pix, aqui mesmo no site, ou no cartão em até 2x."}</p></li>
-            <li><Ornament n={2} color="#368c5e" /><p>{completo ? `Seus números ficam guardados por ${ACAO.minutosReserva} minutos. Pague no Pix ou no cartão em até 2x: o pagamento vale ${ACAO.minutosPagamento} minutos.` : "Com o pagamento confirmado, escolha o seu número entre os livres do quadro."}</p></li>
+            <li><Ornament n={1} color="#ff9d3b" /><p>{completo ? "Escolha um ou mais bilhetes. Sem ideia? O 🎲 escolhe por você." : "Pague R$ 100 no Pix, aqui mesmo no site, ou no cartão em até 2x."}</p></li>
+            <li><Ornament n={2} color="#368c5e" /><p>{completo ? `Seus bilhetes ficam guardados por ${ACAO.minutosReserva} minutos. Pague no Pix ou no cartão em até 2x: o pagamento vale ${ACAO.minutosPagamento} minutos.` : "Com o pagamento confirmado, escolha o seu bilhete entre os livres do quadro."}</p></li>
             <li><Ornament n={3} color="#b0293b" /><p>Receba a confirmação por e-mail e acompanhe a revelação ao vivo em 25/12.</p></li>
           </ol>
           <div className="prize gift"><i className="ribbon-v" /><GiftBow className="gift-bow" />
             <span className="gift-kicker">O presente que volta</span>
             <strong>R$ 10.000</strong>
-            <span>Só 500 números · Sorteio dia 25/12 mesmo se não vender tudo</span>
+            <span>Só 500 bilhetes · Sorteio dia 25/12 mesmo se não vender tudo</span>
           </div>
         </div>
         <div className="raffle-layout" id="participar">
           {free <= 0 && !isLoading ? (
-            <div className="soldout-card"><span>500 de 500</span><h3>Todos os números já encontraram dono.</h3><p>Obrigado por fazer parte desta noite de Natal com o Gatil.</p></div>
+            <div className="soldout-card"><span>500 de 500</span><h3>Todos os bilhetes já encontraram dono.</h3><p>Obrigado por fazer parte desta noite de Natal com o Gatil.</p></div>
           ) : (
             <div className="number-board cane-thin">
               <div className="board-top">
-                <div><h3>{isLoading ? "…" : free} <span>números esperando dono</span></h3><p>{completo ? `Toque em até ${ACAO.maxNumeros} números. Tocou de novo, desmarca.` : "Você escolhe o seu logo depois do pagamento. Aqui dá pra ver quais ainda estão livres."}</p></div>
+                <div><h3>{isLoading ? "…" : free} <span>bilhetes esperando dono</span></h3><p>{completo ? `Toque em até ${ACAO.maxNumeros} bilhetes. Tocou de novo, desmarca.` : "Você escolhe o seu logo depois do pagamento. Aqui dá pra ver quais ainda estão livres."}</p></div>
                 {completo && <button className="button green bowed" onClick={() => addRandom(1)}>Me surpreenda 🎲<Bow /></button>}
               </div>
               {error && <p className="board-error" role="alert">{error}</p>}
@@ -349,7 +349,7 @@ export function AcaoNatalPage() {
         <div className="goal">
           <div className="goal-top"><span className="label">Nossa meta</span><b>Meta: {ACAO.meta}</b></div>
           <div className="goal-bar"><span style={{ width: `${(sold.size / ACAO.totalNumeros) * 100}%` }} /></div>
-          <p><b>R$ {(sold.size * 100).toLocaleString("pt-BR")}</b> arrecadados com <b>{sold.size}</b> números · faltam <b>{free}</b></p>
+          <p><b>R$ {(sold.size * 100).toLocaleString("pt-BR")}</b> arrecadados com <b>{sold.size}</b> bilhetes · faltam <b>{free}</b></p>
         </div>
         <div className="actions centered">
           <BuyButton />
@@ -363,7 +363,7 @@ export function AcaoNatalPage() {
         <Flake className="f1 cr" /><Flake className="f2 cr" /><Flake className="f3 cr" />
         <span className="label light">Quem já faz parte</span>
         <h2>Quem conhece o Gatil de perto costuma ficar.</h2>
-        <p className="intro">Adotantes, doadores de todo mês e gente que confere cada prestação de contas. E {sold.size} números desta ação já têm dono.</p>
+        <p className="intro">Adotantes, doadores de todo mês e gente que confere cada prestação de contas. E {sold.size} bilhetes desta ação já têm dono.</p>
         <div className="ig-grid">
           {testimonials.map((t) => (
             <article className="ig-card cane" key={t.user + t.tag}>
@@ -378,14 +378,14 @@ export function AcaoNatalPage() {
         <ul className="seals">
           <li><b>CNPJ</b>25.382.038/0001-05</li><li><b>Desde 2016</b>com CNPJ ativo</li><li><b>10 anos</b>cuidando de gatos</li><li><b>Prestação de contas</b>aberta no Instagram</li>
         </ul>
-        <BuyButton>Escolher meu número e <br /> entrar pra essa turma</BuyButton>
+        <BuyButton>Escolher meu bilhete e <br /> entrar pra essa turma</BuyButton>
       </section>
 
       {/* 3.7 FAQ */}
       <section className="section faq cream scallop-top cane-strip-top" id="duvidas">
         <Flake className="f1 red" /><Flake className="f2 green" />
         <span className="label">Tire suas dúvidas</span>
-        <h2>Antes de tirar o seu número</h2>
+        <h2>Antes de tirar o seu bilhete</h2>
         <div className="faq-list">
           {[...faqTop, ...(moreFaq ? faqMore : [])].map(([q, a]) => (
             <div className={`faq-item ${openFaq === q ? "open" : ""}`} key={q}>
@@ -404,7 +404,7 @@ export function AcaoNatalPage() {
         <Garland className="under-scallop" /><Snow count={24} />
         <div className="closing-logo"><img src={`${IMG}/acao-solidaria-animada-fundo-verde.png`} alt="Ação Solidária" /></div>
         <div className="closing-copy">
-          <h2>Faltam <strong>{free}</strong> números pra fechar essa conta. Um deles pode ser o seu.</h2>
+          <h2>Faltam <strong>{free}</strong> bilhetes pra fechar essa conta. Um deles pode ser o seu.</h2>
           <BuyButton />
           <p className="deadline">Vendas até {ACAO.prazo}</p>
         </div>
@@ -427,7 +427,7 @@ export function AcaoNatalPage() {
 
       {completo && selected.size > 0 && (
         <button className="selection-bar" onClick={() => document.querySelector(".cart")?.scrollIntoView({ behavior: "smooth", block: "start" })}>
-          {selected.size} {selected.size === 1 ? "número" : "números"} · R$ {(selected.size * 100).toLocaleString("pt-BR")} · <b>Continuar ↓</b>
+          {selected.size} {selected.size === 1 ? "bilhete" : "bilhetes"} · R$ {(selected.size * 100).toLocaleString("pt-BR")} · <b>Continuar ↓</b>
         </button>
       )}
     </main>
