@@ -10,6 +10,7 @@ import { AcaoNatalPage } from "@/features/acao-natal/AcaoNatalPage";
 import { RegulamentoAcaoPage } from "@/features/acao-natal/RegulamentoAcaoPage";
 import { PagamentoPendentePage } from "@/pages/PagamentoPendentePage";
 import { PagamentoRecusadoPage } from "@/pages/PagamentoRecusadoPage";
+import { CompraRetornoPage } from "@/pages/CompraRetornoPage";
 import { DoacaoRecusadaPage } from "@/pages/DoacaoRecusadaPage";
 import { DoacaoPendentePage } from "@/pages/DoacaoPendentePage";
 import { DoacaoConfirmadaPage } from "@/pages/DoacaoConfirmadaPage";
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
           { path: "rifa/pagamento-aprovado", element: <ChooseNumberPage />, loader: chooseNumberLoader },
           { path: "rifa/pagamento-pendente", element: <PagamentoPendentePage /> },
           { path: "rifa/pagamento-recusado", element: <PagamentoRecusadoPage /> },
+          // Volta do cartão de uma compra com reserva (números escolhidos antes de pagar)
+          { path: "rifa/compra/aprovada", element: <CompraRetornoPage retorno="aprovada" /> },
+          { path: "rifa/compra/pendente", element: <CompraRetornoPage retorno="pendente" /> },
+          { path: "rifa/compra/recusada", element: <CompraRetornoPage retorno="recusada" /> },
         ],
       },
       {

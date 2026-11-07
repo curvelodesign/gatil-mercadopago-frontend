@@ -27,7 +27,7 @@ const faqTop: [string, React.ReactNode][] = [
   ["Dá pra ajudar sem concorrer?", <>Sim! Doe qualquer valor na nossa <Link to={ACAO.links.doacao}>página de doação</Link>.</>],
 ]
 const faqMore: [string, React.ReactNode][] = [
-  ["Posso comprar mais de um número?", ACAO.fluxoCompleto ? <>Pode, e na mesma compra. É só tocar em quantos números quiser no quadro antes de pagar. Cada número custa R$ 100, e cada um é uma chance a mais na revelação.</> : <>Pode. Cada pagamento vale um número: depois de escolher o primeiro, é só voltar aqui e fazer outra compra. Cada número custa R$ 100, e cada um é uma chance a mais na revelação.</>],
+  ["Posso comprar mais de um número?", ACAO.fluxoCompleto ? <>Pode, e na mesma compra: toque em até {ACAO.maxNumeros} números no quadro antes de pagar. Quer mais? É só fazer outra compra. Cada número custa R$ 100, e cada um é uma chance a mais na revelação.</> : <>Pode. Cada pagamento vale um número: depois de escolher o primeiro, é só voltar aqui e fazer outra compra. Cada número custa R$ 100, e cada um é uma chance a mais na revelação.</>],
   ["Posso dar um número de presente?", <>Pode. Compre com o seu e-mail e passe o número pra quem você quiser. Se ele for sorteado, o prêmio é pago a quem fez a compra, e vocês se acertam.</>],
   ["Paguei e ainda não escolhi meu número. O que eu faço?", <>Procure o e-mail que enviamos no dia da compra: ele traz o link para escolher. Você tem até 20 dias a partir da compra; se não escolher nesse prazo, o sistema sorteia um número livre para você e avisa por e-mail. Os lembretes chegam no dia da compra e 5, 10, 15 e 20 dias depois.</>],
   ["Preciso comprar número pra adotar um gato?", <>Não. A ação serve só para arrecadar dinheiro e não tem nenhuma ligação com adoção. Se você quer adotar, entre no nosso <a href={ACAO.links.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>, veja os gatos no destaque “Disponíveis” e clique no link da bio para preencher o formulário de adoção.</>],
@@ -152,12 +152,14 @@ export function AcaoNatalPage() {
   const completo = ACAO.fluxoCompleto
   const toggle = (n: number) => {
     if (sold.has(n)) return
-    setSelected((cur) => { const next = new Set(cur); if (next.has(n)) next.delete(n); else next.add(n); return next })
+    // Até ACAO.maxNumeros por compra (o backend confere de novo)
+    setSelected((cur) => { const next = new Set(cur); if (next.has(n)) next.delete(n); else if (next.size < ACAO.maxNumeros) next.add(n); return next })
   }
   const addRandom = (k: number) => {
     const pool = Array.from({ length: ACAO.totalNumeros }, (_, i) => i + 1).filter((n) => !sold.has(n) && !selected.has(n))
     const picks: number[] = []
-    for (let i = 0; i < k && pool.length; i++) picks.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0])
+    const vagas = Math.max(0, ACAO.maxNumeros - selected.size)
+    for (let i = 0; i < Math.min(k, vagas) && pool.length; i++) picks.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0])
     if (!picks.length) return
     setRangeStart(Math.floor((picks[picks.length - 1] - 1) / 100) * 100 + 1)
     setSelected((cur) => new Set([...cur, ...picks]))
@@ -281,7 +283,7 @@ export function AcaoNatalPage() {
         <div className="raffle-intro">
           <ol className="steps">
             <li><Ornament n={1} color="#ff9d3b" /><p>{completo ? "Escolha um ou mais números. Sem ideia? O 🎲 escolhe por você." : "Pague R$ 100 no Pix, aqui mesmo no site, ou no cartão em até 2x."}</p></li>
-            <li><Ornament n={2} color="#368c5e" /><p>{completo ? "Pague em até 15 minutos, no Pix ou no cartão em até 2x." : "Com o pagamento confirmado, escolha o seu número entre os livres do quadro."}</p></li>
+            <li><Ornament n={2} color="#368c5e" /><p>{completo ? `Seus números ficam guardados por ${ACAO.minutosReserva} minutos. Pague no Pix ou no cartão em até 2x: o pagamento vale ${ACAO.minutosPagamento} minutos.` : "Com o pagamento confirmado, escolha o seu número entre os livres do quadro."}</p></li>
             <li><Ornament n={3} color="#b0293b" /><p>Receba a confirmação por e-mail e acompanhe a revelação ao vivo em 25/12.</p></li>
           </ol>
           <div className="prize gift"><i className="ribbon-v" /><GiftBow className="gift-bow" />
@@ -296,7 +298,7 @@ export function AcaoNatalPage() {
           ) : (
             <div className="number-board cane-thin">
               <div className="board-top">
-                <div><h3>{isLoading ? "…" : free} <span>números esperando dono</span></h3><p>{completo ? "Toque em quantos números quiser. Tocou de novo, desmarca." : "Você escolhe o seu logo depois do pagamento. Aqui dá pra ver quais ainda estão livres."}</p></div>
+                <div><h3>{isLoading ? "…" : free} <span>números esperando dono</span></h3><p>{completo ? `Toque em até ${ACAO.maxNumeros} números. Tocou de novo, desmarca.` : "Você escolhe o seu logo depois do pagamento. Aqui dá pra ver quais ainda estão livres."}</p></div>
                 {completo && <button className="button green bowed" onClick={() => addRandom(1)}>Me surpreenda 🎲<Bow /></button>}
               </div>
               {error && <p className="board-error" role="alert">{error}</p>}

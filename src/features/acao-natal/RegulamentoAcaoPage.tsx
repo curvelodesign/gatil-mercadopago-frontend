@@ -57,7 +57,7 @@ const SECAO_5_COMPLETO: SectionData =
           { number: "3", text: "Confirmação: com o pagamento aprovado, o número passa a ser do participante e a confirmação é enviada para o e-mail informado." },
         ],
       },
-      { number: "5.2", text: "Os números escolhidos ficam reservados por 15 minutos. Se o pagamento não for confirmado nesse prazo, a reserva é cancelada, os números voltam a ficar livres e é preciso iniciar a compra de novo." },
+      { number: "5.2", text: "Os números escolhidos (até 10 por compra) ficam reservados por 15 minutos enquanto o participante escolhe a forma de pagamento. Gerado o pagamento, o Pix ou o link do cartão vale 30 minutos, e os números continuam reservados nesse período. Se o pagamento não for confirmado no prazo, a reserva é cancelada, os números voltam a ficar livres e é preciso iniciar a compra de novo. Se um pagamento for aprovado depois do prazo e algum número já tiver outro dono, o participante recebe por e-mail um link para escolher outro número livre (com até 20 dias para isso; depois, um número livre é sorteado para ele)." },
       { number: "5.3", text: "O titular do número é sempre quem fez a compra (dono do e-mail e do CPF usados). O participante pode presentear alguém com um número, mas, se ele for sorteado, o prêmio é pago a quem fez a compra." },
       { number: "5.4", text: "Compras feitas no sistema anterior: quem comprou quando o pagamento vinha antes da escolha recebeu um e-mail com o link para escolher o número. Essa pessoa tem até 20 dias a partir da compra para escolher. Depois desse prazo, o sistema atribui um número livre aleatório e avisa por e-mail. Os lembretes são enviados no dia da compra e 5, 10, 15 e 20 dias depois." },
     ],
@@ -155,6 +155,7 @@ const sections: SectionData[] = [
     items: [
       { number: "10.1", text: "Os dados informados na compra (nome, e-mail e telefone) são usados apenas para confirmar a compra, enviar avisos sobre a ação, realizar o sorteio e pagar o prêmio." },
       { number: "10.2", text: "O tratamento desses dados segue a Lei Geral de Proteção de Dados (Lei 13.709/2018) e a Política de Privacidade do Gatil, disponível na página da ação." },
+      { number: "10.3", text: "Se a compra não for paga, os dados informados (nome, e-mail e telefone) são apagados em até 7 dias. Para limitar reservas automáticas, o site usa uma verificação anti-robô (Cloudflare Turnstile) e guarda só um código derivado do endereço IP, apagado junto com esses dados." },
     ],
   },
   {

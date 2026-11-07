@@ -15,9 +15,14 @@ export const ACAO = {
   meta: "R$ 50.000",
   totalNumeros: 500,
   /**
-   * false (hoje): paga primeiro, escolhe o número depois (fluxo que já está no ar).
-   * true: escolhe vários números, reserva por 15 min e paga o total (api.ts).
-   * Daniel: ligue depois que os endpoints de reserva estiverem no backend.
+   * VITE_FLUXO_COMPLETO=true: escolhe até 10 números, reserva por 15 min e paga
+   * o total (api.ts). Vazio: paga primeiro e escolhe o número depois (fluxo antigo).
    */
-  fluxoCompleto: false,
+  fluxoCompleto: import.meta.env.VITE_FLUXO_COMPLETO === "true",
+  /** Máximo de números por compra (o backend confere: MAX_NUMEROS_POR_PEDIDO). */
+  maxNumeros: 10,
+  /** Minutos que os números ficam guardados enquanto a pessoa escolhe como pagar. */
+  minutosReserva: 15,
+  /** Minutos de validade do Pix e do link do cartão. */
+  minutosPagamento: 30,
 } as const

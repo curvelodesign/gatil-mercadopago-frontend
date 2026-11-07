@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
-    "test:e2e": "bddgen && playwright test"
+    "test:e2e": "bddgen && playwright test",
+    "dev:mock": "vite --mode mock"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -1,6 +1,7 @@
 import { ApiRequestError } from "@/types/api";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+// Sempre "/api" no navegador (o proxy do Vite ou o deploy resolve o resto).
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
@@ -26,10 +27,13 @@ async function request<TResponse>(
 
   if (!response.ok) {
     const payload = await response.json().catch(() => null);
+    // O corpo inteiro vai junto: alguns erros trazem dados (ex: os números
+    // indisponíveis no 409 da reserva).
     throw new ApiRequestError(
       payload?.message ?? "Erro inesperado ao falar com o servidor.",
       response.status,
-      payload?.code
+      payload?.code,
+      payload
     );
   }
 

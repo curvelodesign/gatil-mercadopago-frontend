@@ -43,7 +43,13 @@ export async function chooseNumberLoader({ request }: LoaderFunctionArgs): Promi
     return { token, alreadyClaimedNumber: null, tokenReenvio: null };
   } catch (err) {
     if (err instanceof ApiRequestError && err.status === 409) {
-      const dados = err.data as { claimedNumber?: number; tokenReenvio?: string } | undefined;
+      const dados = err.data as { claimedNumber?: number; tokenReenvio?: string; pedidoId?: string } | undefined;
+      // Pagamento de uma compra com reserva: os números já foram escolhidos.
+      if (typeof dados?.pedidoId === "string") {
+        throw redirect(
+          `/rifa/compra/aprovada?payment_id=${encodeURIComponent(paymentId)}&external_reference=${encodeURIComponent(dados.pedidoId)}`
+        );
+      }
       const claimedNumber = dados?.claimedNumber;
       if (typeof claimedNumber === "number") {
         // Já escolheu antes — não é uma falha, é um estado válido.
