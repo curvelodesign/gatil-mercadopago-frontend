@@ -5,6 +5,7 @@ import { CheckoutReserva } from "@/features/acao-natal/CheckoutReserva"
 import { useAvailableNumbers } from "@/features/raffle/hooks/useAvailableNumbers"
 import { ACAO, A, IMG } from "@/features/acao-natal/config"
 import { semViuvas } from "@/features/acao-natal/semViuvas"
+import { instalarComandoPixTeste } from "@/features/pix/pixTeste"
 
 const pad = (n: number) => String(n).padStart(3, "0")
 
@@ -168,6 +169,8 @@ export function AcaoNatalPage() {
   const freeIn = (start: number) => Array.from({ length: 100 }, (_, i) => start + i).filter((n) => !sold.has(n)).length
 
   useEffect(() => { document.title = "Ação Solidária de Natal · Gatil Irmã Francisca" }, [])
+  // gatilPixTeste("<PIX_TESTE_CHAVE>") no console liga o Pix de teste de R$ 0,01 (pixTeste.ts)
+  useEffect(() => { instalarComandoPixTeste() }, [])
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 10)
     on(); window.addEventListener("scroll", on, { passive: true }); return () => window.removeEventListener("scroll", on)

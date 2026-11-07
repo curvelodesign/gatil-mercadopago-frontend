@@ -179,3 +179,11 @@ Funcionalidade: Ação de Natal com reserva — escolhe os números, guarda por 
 
   Cenário: Os headers de segurança estão configurados no deploy
     Então o deploy deve mandar os headers de segurança
+
+  Cenário: O comando do Pix de teste existe no console da /rifa e liga o modo teste
+    Dado que a reserva dos números é aceita
+    Quando eu acesso "/rifa"
+    E eu ligo o Pix de teste pelo console com a chave "chave-teste"
+    E eu escolho os números 10 no quadro
+    E eu clico em "Continuar"
+    Então a reserva deve ter sido pedida com o header de teste "chave-teste"
