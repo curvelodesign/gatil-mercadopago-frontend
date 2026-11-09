@@ -94,7 +94,7 @@ html:has(.acao){scroll-behavior:smooth;scroll-padding-top:76px}
 .acao .twinkle-one{right:1px;bottom:24%}
 .acao .twinkle-two{left:5px;bottom:9%;font-size:7px;animation-delay:-1s}
 @keyframes twinkle{0%,100%{opacity:.1;transform:scale(.45)}50%{opacity:1;transform:scale(1.2) rotate(90deg)}}
-.acao .hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:24px;max-width:1232px;margin:auto;padding:78px 32px 56px}
+.acao .hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:24px;max-width:1232px;margin:auto;padding:78px 32px 24px}
 .acao .hero-copy{display:flex;flex-direction:column;gap:16px;max-width:580px}
 .acao .pills{display:flex;gap:12px}
 .acao .pills span{font-family:var(--body-xb);font-weight:800;border-radius:99px;padding:8px 16px;font-size:14px;border:2px solid var(--ink)}
@@ -149,8 +149,8 @@ html:has(.acao){scroll-behavior:smooth;scroll-padding-top:76px}
 .acao .hat-1{width:76px;top:-22px;left:53px;transform:rotate(26deg)}
 .acao .hat-2{width:88px;top:-19px;left:55px;transform:rotate(10deg)}
 .acao .hat-3{width:76px;top:-21px;left:28px;transform:rotate(-10deg)}
-.acao .ticker{position:relative;height:110px;background:linear-gradient(var(--yellow) 0 50%,var(--cream) 50%);overflow:hidden}
-.acao .ticker-band{position:absolute;top:30px;left:-5vw;width:110vw;overflow:hidden;background:var(--red-dark);border-block:2.5px solid var(--ink);padding:10px 0;transform:rotate(-1.5deg)}
+.acao .ticker{position:relative;height:calc(84px + 3vw);background:linear-gradient(var(--yellow) 0 50%,var(--cream) 50%);overflow:hidden}
+.acao .ticker-band{position:absolute;top:50%;left:-5vw;width:110vw;overflow:hidden;background:var(--red-dark);border-block:2.5px solid var(--ink);padding:10px 0;transform:translateY(-50%) rotate(-1.5deg)}
 .acao .ticker-track{display:flex;width:max-content;white-space:nowrap;animation:ticker 30s linear infinite;will-change:transform}
 .acao .ticker span{font-family:var(--head);font-weight:700;font-size:27px;color:var(--yellow);padding-right:26px}
 .acao .ticker b{color:var(--gold);padding-left:22px;text-shadow:0 0 8px rgba(242,193,78,.8)}
@@ -480,8 +480,8 @@ html:has(.acao){scroll-behavior:smooth;scroll-padding-top:76px}
 .acao .ornament-3,.acao .ornament-5{display:none}
 .acao .ornament-1{width:40px;height:78px}
 .acao .ornament-6{left:auto;right:10px;width:40px;height:76px}
-.acao .ticker{height:62px}
-.acao .ticker-band{top:12px;padding:6px 0}
+.acao .ticker{height:calc(48px + 3vw)}
+.acao .ticker-band{padding:6px 0}
 .acao .ticker span{font-size:16px;padding-right:16px}
 .acao .ticker b{padding-left:14px}
 .acao .section{padding:64px 16px;gap:16px}
